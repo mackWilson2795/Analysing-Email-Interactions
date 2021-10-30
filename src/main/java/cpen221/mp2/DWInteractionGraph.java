@@ -1,12 +1,23 @@
 package cpen221.mp2;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Set;
+import java.util.Scanner;
+import java.io.IOException;
+import java.io.File;
+import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class DWInteractionGraph {
 
+
+
     /* ------- Task 1 ------- */
     /* Building the Constructors */
+    private Hashtable<String, Interaction> interactionGraph;
+
 
     /**
      * Creates a new DWInteractionGraph using an email interaction file.
@@ -16,8 +27,56 @@ public class DWInteractionGraph {
      *                 directory containing email interactions
      */
     public DWInteractionGraph(String fileName) {
-        // TODO: Implement this constructor
+
+        Hashtable<String, Interaction> temporary = new Hashtable<String, Interaction>();
+
+        try {
+
+            File file = new File(fileName);
+            Scanner input = new Scanner(file);
+
+
+            int count = 0;
+            String a = "-1", b = "-1";
+            while (input.hasNext()) {
+                String word = input.next();
+                count++;
+
+
+                if (count == 1) {
+                    a = word;
+                }
+                if (count == 2) {
+                    b = word;
+                }
+                if (count == 3) {
+                    if (temporary != null && a.compareTo("-1") != 0) {
+                        if (temporary.containsKey(a)) {
+                            Interaction temp = temporary.get(a);
+                            temp.add(b);
+                            temporary.remove(a);
+                            temporary.put(a, temp);
+
+                        }
+                    } else {
+                        if (b.compareTo("-1") != 0) {
+                            Interaction temp1 = new Interaction(b);
+                            temporary.put(a, temp1);
+                        }
+                    }
+
+                    count = 0;
+                }
+            }
+        }
+        catch(FileNotFoundException e){
+
+        }
+
+
     }
+
+    //TODO: Copy Hastable to main Hastable
 
     /**
      * Creates a new DWInteractionGraph from a DWInteractionGraph object
