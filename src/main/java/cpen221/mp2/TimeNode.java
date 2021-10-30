@@ -6,17 +6,12 @@ import java.util.Comparator;
 public class TimeNode implements Comparable<TimeNode> {
     private final int time;
     private  int numEmails;
-    private ArrayList<Integer> receivers;
-    public TimeNode (Email email){
-        time = email.getTime;
+    public TimeNode (int time1){
+        time = time1;
         numEmails = 1;
-        receivers = new ArrayList<Integer>(email.getReceiver);
     }
-    public void add(Email email){
-        if (email.getTime == time) {
+    public void add(){
         numEmails ++;
-        receivers.add(email.getReceiver);
-        }
     }
     public int getTime(){
         return time;

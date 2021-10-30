@@ -1,7 +1,9 @@
 package cpen221.mp2;
 
+import java.util.TreeSet;
+
 public class Interaction {
-    private ArrayList<I
+    private TreeSet<TimeNode> ;
     private int sender;
     private int reciever;
     public Interaction(){
