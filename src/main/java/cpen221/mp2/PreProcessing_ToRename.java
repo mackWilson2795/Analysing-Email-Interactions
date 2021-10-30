@@ -1,18 +1,21 @@
 package cpen221.mp2;
 
+import cpen221.mp2.Exceptions.InvalidEmailException;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 
-public class HelperFunctionsToRename {
+public class PreProcessing_ToRename {
 
     /** Reader function
      * Give it an input file (.txt)
      * creates a list of emails (sender, receiver, timestamp)
      *
      */
+    // TODO: make spec
     public static ArrayList<Email> readerFunction(String fileName) {
         ArrayList<Email> emailList = new ArrayList<>();
         try {
@@ -23,14 +26,21 @@ public class HelperFunctionsToRename {
             for (int end = iterator.next();
                  end != BreakIterator.DONE;
                  start = end, end = iterator.next()){
-
+                emailList.add(new Email(rawData.substring(iterator.first(), iterator.next())));
             }
-        } catch (IOException ioe){
+            // TODO: decide throw vs. catch of the InvalidEmailException
+        } catch (IOException | InvalidEmailException ioe){
             ioe.printStackTrace();
-            System.out.println("Error reading data file! Check that the file path and name is correct.");
+            if (ioe instanceof IOException){
+                System.out.println("Error reading data file at " + fileName
+                        + " Check that the file path and name is correct.");
+            }
+            if (ioe instanceof InvalidEmailException){
+                System.out.println("Detected issue with data formatting in " + fileName
+                        + " ensure all lines contain three entries, corresponding to sender, receiver, and timestamp.");
+            }
         }
-
-        return null;
+        return emailList;
     }
 
     /**
