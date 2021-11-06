@@ -1,9 +1,13 @@
 package cpen221.mp2;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static cpen221.mp2.PreProcessing_ToRename.readerFunction;
 
 public class UDWInteractionGraph {
+
+    private Hashtable<Integer, Hashtable<Integer, Interaction>> graph;
+
 
     /* ------- Task 1 ------- */
     /* Building the Constructors */
@@ -15,8 +19,24 @@ public class UDWInteractionGraph {
      * @param fileName the name of the file in the resources
      *                 directory containing email interactions
      */
+    //TODO: how do I put the reference for one object in both things
     public UDWInteractionGraph(String fileName) {
-        // TODO: Implement this constructor
+        graph = new Hashtable<>();
+        ArrayList<Email> emailDataRaw = PreProcessing_ToRename.readerFunction(fileName);
+        for (Email email:emailDataRaw) {
+            if (graph.containsKey(email.getSender())){
+                if(graph.get(email.getSender()).containsKey(email.getReceiver())){
+                    graph.get(email.getSender()).get(email.getReceiver()).add(email.getTimeStamp());
+                }
+                else{ graph.get(email.getSender()).put(email.getReceiver(),
+                                    new Interaction(email.getTimeStamp()));
+                }
+            }
+            else{ Hashtable<Integer, Interaction> receiverTable = new Hashtable<>();
+            receiverTable.put(email.getReceiver(), new Interaction(email.getTimeStamp()));
+            graph.put(email.getSender(), receiverTable);
+            }
+        }
     }
 
     /**
@@ -45,7 +65,17 @@ public class UDWInteractionGraph {
      *                   nor the receiver exist in userFilter.
      */
     public UDWInteractionGraph(UDWInteractionGraph inputUDWIG, List<Integer> userFilter) {
-        // TODO: Implement this constructor
+        graph = (Hashtable<Integer, Hashtable<Integer, Interaction>>) inputUDWIG.graph.clone();
+        for (Integer sender:graph.keySet()) {
+            if(userFilter.contains(sender)){
+                graph.remove(sender);
+            }
+            for (Integer receiver: graph.get(sender).keySet()) {
+                if(userFilter.contains(receiver)){
+                    graph.remove(receiver);
+                }
+            }
+        }
     }
 
     /**
@@ -62,8 +92,12 @@ public class UDWInteractionGraph {
      * in this DWInteractionGraph.
      */
     public Set<Integer> getUserIDs() {
-        // TODO: Implement this getter method
-        return null;
+        HashSet<Integer> userIDs = new HashSet<>();
+        userIDs.addAll(graph.keySet());
+        for (Integer key: graph.keySet()) {
+            userIDs.addAll(graph.get(key).keySet());
+        }
+        return userIDs;
     }
 
     /**
