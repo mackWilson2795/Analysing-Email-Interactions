@@ -21,21 +21,33 @@ public class UDWInteractionGraph {
      */
     //TODO: how do I put the reference for one object in both things
     public UDWInteractionGraph(String fileName) {
-        graph = new Hashtable<>();
+        graph = new Hashtable<Integer, Hashtable<Integer, Interaction>>();
         ArrayList<Email> emailDataRaw = PreProcessing_ToRename.readerFunction(fileName);
         for (Email email:emailDataRaw) {
-            if (graph.containsKey(email.getSender())){
-                if(graph.get(email.getSender()).containsKey(email.getReceiver())){
-                    graph.get(email.getSender()).get(email.getReceiver()).add(email.getTimeStamp());
-                }
-                else{ graph.get(email.getSender()).put(email.getReceiver(),
-                                    new Interaction(email.getTimeStamp()));
-                }
+            addEmail(email);
+        }
+    }
+
+    private void addEmail(Email email){
+        int user1 = email.getSender(), user2 = email.getReceiver(), time = email.getTimeStamp();
+     addUserInteraction(user1, user2, time);
+     addUserInteraction(user2, user1, time);
+    }
+
+    private void addUserInteraction(int user1, int user2, int time){
+        if (graph.containsKey(user1)){
+            Hashtable<Integer, Interaction> user1Table = graph.get(user1);
+            if (user1Table.containsKey(user2)){
+                user1Table.get(user2).add(time);
             }
-            else{ Hashtable<Integer, Interaction> receiverTable = new Hashtable<>();
-            receiverTable.put(email.getReceiver(), new Interaction(email.getTimeStamp()));
-            graph.put(email.getSender(), receiverTable);
+            else {
+                user1Table.put(user2, new Interaction(time));
             }
+        }
+        else {
+            Hashtable<Integer, Interaction> newUser1Table = new Hashtable<>();// do I need to make a new one?
+            newUser1Table.put(user2, new Interaction(time));
+            graph.put(user1, newUser1Table);
         }
     }
 
@@ -51,7 +63,7 @@ public class UDWInteractionGraph {
      *                   t0 <= t <= t1 range.
      */
     public UDWInteractionGraph(UDWInteractionGraph inputUDWIG, int[] timeFilter) {
-        // TODO: Implement this constructor
+
     }
 
     /**
