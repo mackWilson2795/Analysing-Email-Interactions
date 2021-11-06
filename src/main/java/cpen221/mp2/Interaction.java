@@ -15,11 +15,13 @@ public class Interaction {
         frequencyCount = new HashMap<Integer, Integer>();
         emailCount = 0;
     }
+
     public Interaction(int time){
         frequencyCount.put(time, 1);
         set.add(new TimeNode(time, 1));
         emailCount = 1;
     }
+
     public void add(int time){
         if(frequencyCount.containsKey(time)) {
             TimeNode node = new TimeNode(time, frequencyCount.get(time));
@@ -40,5 +42,4 @@ public class Interaction {
         }
         return sum;
     }
-
 }
