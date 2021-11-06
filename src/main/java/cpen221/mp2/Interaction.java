@@ -1,51 +1,65 @@
 package cpen221.mp2;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Hashtable;
+import java.util.TreeSet;
 
 public class Interaction{
 
-    private Hashtable<String, Integer> userInteracts;
-    private int totalInteractions;
-    private String receiver;
-    private HashSet<String> receivers;
-    int numinteracts;
-
+    private int interactionNumber;
+    private TreeSet<Integer> times;
+    private ArrayList<Integer> alltimes;
 
     public Interaction(){
-        totalInteractions = 0;
+        interactionNumber = 0;
     }
 
-    public Interaction(String receiver){
-        if (userInteracts.containsKey(receiver)){
-            numinteracts = userInteracts.get(receiver);
-            numinteracts++;
-            userInteracts.remove(receiver);
-            userInteracts.put(receiver, numinteracts);
-            totalInteractions++;
-        }
-        else{
-            userInteracts.put(receiver, 0);
-            totalInteractions++;
-            receivers.add(receiver);
-        } //replace with add()
+    public Interaction(int time){
+
+        times = new TreeSet<Integer>();
+        times.add(time);
+        alltimes = new ArrayList<Integer>();
+        alltimes.add(time);
+        interactionNumber = 1;
+
     }
-//add getter methods
 
-    public void add(String receiver){
-        if (userInteracts.containsKey(receiver)){
-            numinteracts = userInteracts.get(receiver);
-            numinteracts++;
-            userInteracts.remove(receiver);
-            userInteracts.put(receiver, numinteracts);
-            totalInteractions++;
+/*    public Interaction(int interactions, Set<Integer> times){
+        for(Integer time: times){
+            this.times.add(time);
         }
-        else{
-            userInteracts.put(receiver, 0);
-            totalInteractions++;
-            receivers.add(receiver);
-        }
+        interactionNumber = interactions;
 
+    }*/
+    public Interaction(int interactions, ArrayList<Integer> times){
+        for(Integer time: times){
+            alltimes.add(time);
+        }
+        interactionNumber = interactions; //be careful
+
+    }
+
+
+    public void addInteraction(int time){
+
+        times.add(time);
+        alltimes.add(time);
+        interactionNumber++;
+
+    }
+
+    public int getInteractionCount(){
+        return interactionNumber;
+    }
+
+    public List<Integer> getTimes(){
+        List<Integer> copy = new ArrayList<Integer>();
+        for(Integer time: times){
+            copy.add(time);
+        }
+        return copy;
     }
 
 
