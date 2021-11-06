@@ -34,8 +34,17 @@ public class Interaction{
 
     }*/
     public Interaction(int interactions, ArrayList<Integer> times){
+
+        if (alltimes == null){
+            alltimes = new ArrayList<Integer>();
+        }
+        if(this.times == null){
+            this.times = new TreeSet<Integer>();
+        }
+
         for(Integer time: times){
             alltimes.add(time);
+            this.times.add(time);
         }
         interactionNumber = interactions; //be careful
 
@@ -43,6 +52,13 @@ public class Interaction{
 
 
     public void addInteraction(int time){
+
+        if (alltimes == null){
+            alltimes = new ArrayList<Integer>();
+        }
+        if(times == null){
+            times = new TreeSet<Integer>();
+        }
 
         times.add(time);
         alltimes.add(time);

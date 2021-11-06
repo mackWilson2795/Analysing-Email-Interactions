@@ -130,6 +130,9 @@ public class DWInteractionGraph {
                             }
                         }
 
+                        if(interactionGraph == null){
+                            interactionGraph = new Hashtable<Integer, Hashtable<Integer, Interaction>>();
+                        }
                         interactionGraph.put(sender, new Hashtable<Integer, Interaction>());
                         interactionGraph.get(sender).put(receiver, placeHolder);
                     }
@@ -142,8 +145,8 @@ public class DWInteractionGraph {
         for(Integer receive1:users){
             for(Integer send1:users){
                 if(inputDWIG.isReceiver(receive1)){
-                    if(inputDWIG.isInteractive(receive1,send1)){
-                        Interaction temp = inputDWIG.getUserInteractionReceiver(receive1,send1);
+                    if(inputDWIG.isInteractiveReceiver(receive1,send1)){
+                        Interaction temp = inputDWIG.getUserInteractionReceiver(receive1,send1);  //////////////////////////////////////
                         List<Integer> times = temp.getTimes();
                         Interaction placeHolder = new Interaction();
 
@@ -153,8 +156,11 @@ public class DWInteractionGraph {
                             }
                         }
 
+                        if(interactionGraphReceiver == null){
+                            interactionGraphReceiver = new Hashtable<Integer, Hashtable<Integer, Interaction>>();
+                        }
                         interactionGraphReceiver.put(receive1, new Hashtable<Integer, Interaction>());
-                        interactionGraph.get(receive1).put(send1,placeHolder);
+                        interactionGraphReceiver.get(receive1).put(send1,placeHolder);
                     }
                 }
             }
