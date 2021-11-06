@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.BreakIterator;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class PreProcessing_ToRename {
 
@@ -20,13 +21,12 @@ public class PreProcessing_ToRename {
         ArrayList<Email> emailList = new ArrayList<>();
         try {
             String rawData = fileReader(fileName);
-            BreakIterator iterator = BreakIterator.getLineInstance();
-            int start = iterator.first();
 
-            for (int end = iterator.next();
-                 end != BreakIterator.DONE;
-                 start = end, end = iterator.next()){
-                emailList.add(new Email(rawData.substring(iterator.first(), iterator.next())));
+            StringTokenizer reader = new StringTokenizer(rawData, "\n");
+
+            while (reader.hasMoreTokens()){
+                String nextEmail = reader.nextToken();
+                emailList.add(new Email(nextEmail));
             }
             // TODO: decide throw vs. catch of the InvalidEmailException
         } catch (IOException | InvalidEmailException ioe){
@@ -55,6 +55,7 @@ public class PreProcessing_ToRename {
         BufferedReader reader = new BufferedReader(new FileReader(fileName));
         for (String fileLine = reader.readLine(); fileLine != null; fileLine = reader.readLine()) {
             rawData.append(fileLine);
+            rawData.append("\n");
         }
         reader.close();
         return rawData.toString();

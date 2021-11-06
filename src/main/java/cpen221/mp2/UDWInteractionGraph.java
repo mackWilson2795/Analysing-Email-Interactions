@@ -8,7 +8,6 @@ public class UDWInteractionGraph {
 
     private Hashtable<Integer, Hashtable<Integer, Interaction>> graph;
 
-
     /* ------- Task 1 ------- */
     /* Building the Constructors */
 

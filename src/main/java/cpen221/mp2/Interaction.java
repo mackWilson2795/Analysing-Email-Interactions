@@ -40,6 +40,7 @@ public class Interaction {
         frequencyCount = new HashMap<Integer, Integer>();
         emailCount = 0;
     }
+
     public Interaction(int time){
         timeOrdered = new TreeSet<TimeNode>();
         frequencyCount = new HashMap<Integer, Integer>();
@@ -47,9 +48,11 @@ public class Interaction {
         timeOrdered.add(new TimeNode(time, 1));
         emailCount = 1;
     }
+
     public Interaction(Interaction interaction){
 
     }
+
     public void add(int time){
         if(frequencyCount.containsKey(time)) {
             TimeNode node = new TimeNode(time, frequencyCount.get(time));
@@ -70,6 +73,7 @@ public class Interaction {
         }
         return sum;
     }
+
 
     public void reduceTimeRange (int lowerBound, int upperBound){
         for (TimeNode node: timeOrdered) {
