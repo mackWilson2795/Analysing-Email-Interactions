@@ -70,12 +70,13 @@ public class Interaction{
         return interactionNumber;
     }
 
-    public List<Integer> getTimes(){
-        List<Integer> copy = new ArrayList<Integer>();
-        for(Integer time: times){
-            copy.add(time);
-        }
-        return copy;
+    public List<Integer> getTimes() {
+
+            List<Integer> copy = new ArrayList<Integer>();
+            for (Integer time : times) {
+                copy.add(time);
+            }
+            return copy;
     }
 
 
