@@ -10,18 +10,19 @@ public class Interaction {
     private int emailCount;
     private ArrayList<Integer> times;
 //Todo: Change name to Interaction_Between2Users
-    /*Rep Invariant : emailCount should always be
-    equal to the sum of values stored in the frequencyCount
-    map. emailCount should also always be equal to the sum of
-    TimeNode.getNumEmails() for each TimeNode in timeOrdered.
+    /* Rep Invariant:
+        emailCount should always be equal to the sum of values
+        stored in the frequencyCount map.
+        emailCount should also always be equal to the sum of
+        TimeNode.getNumEmails() for each TimeNode in timeOrdered.
      */
-    /*
-    Abstraction Function:
-    timeOrdered = representation of every email sent
-                  between 2 users, in the time domain.
-    frequencyCount = maps a time value to a number representing
-                     the number of emails between the two users at that time
-    emailCount = number of emails between the two users
+
+    /* Abstraction Function:
+        timeOrdered = representation of every email sent
+                      between 2 users, in the time domain.
+        frequencyCount = maps a time value to a number representing
+                         the number of emails between the two users at that time
+        emailCount = number of emails between the two users
      */
     //Todo: copy constructor
     public boolean checkRep(){

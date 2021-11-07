@@ -1,6 +1,7 @@
 package cpen221.mp2;
 
 import cpen221.mp2.Users.AbstractUser;
+import cpen221.mp2.Users.UndirectedUser;
 
 import java.util.*;
 
@@ -11,24 +12,22 @@ public class SearchAlgorithms {
     private static boolean found;
 
     // todo: this could take in ints as well - decide what is easiest
-    public static List<Integer> DFS(AbstractUser startUser, AbstractUser endUser, Set<AbstractUser> setOfAllUsers){
-        //todo: revise
-        // Checks to make sure the users exist in the graph
-        if (!setOfAllUsers.contains(startUser) || !setOfAllUsers.contains(endUser)){
-            return null;
-        }
+    public static List<Integer> DFS(AbstractUser startUser, AbstractUser endUser, Map<Integer, AbstractUser> mapOfAllUsers){
 
         found = false;
-        userMap = new HashMap<>();
-        for (AbstractUser user : setOfAllUsers) {
-            userMap.put(user.getUserID(), user);
-        }
+        userMap = new HashMap<>(mapOfAllUsers);
         seen = new HashSet<>();
         searchOrder = new ArrayList<>();
+
+        if (mapOfAllUsers.isEmpty() || !mapOfAllUsers.containsKey(startUser.getUserID())){
+            return null;
+        }
 
         recursiveDFSHelper(startUser, endUser);
 
         if (found) {
+            return searchOrder;
+        } else if (endUser.getUserID() == -1) {
             return searchOrder;
         } else {
             return null;
@@ -62,5 +61,27 @@ public class SearchAlgorithms {
                 recursiveDFSHelper(userMap.get(adjacentUser), endUser);
             }
         }
+    }
+
+    public static boolean pathExists (AbstractUser user1, AbstractUser user2, Map<Integer, AbstractUser> mapOfAllUsers){
+        if (mapOfAllUsers.keySet().isEmpty() || !mapOfAllUsers.containsKey(user1.getUserID())
+                                             || !mapOfAllUsers.containsKey(user2.getUserID())){
+            return false;
+        }
+
+        DFS(user1, user2, mapOfAllUsers);
+
+        return found;
+    }
+
+    public static HashSet<Integer> findComponent (AbstractUser user1, Map<Integer, AbstractUser> mapOfAllUsers){
+        if (mapOfAllUsers.keySet().isEmpty() || !mapOfAllUsers.containsKey(user1.getUserID())){
+            return new HashSet<>(user1.getUserID());
+        }
+
+        // TODO: very important to verify this
+        DFS(user1, new UndirectedUser(-1), mapOfAllUsers);
+
+        return seen;
     }
 }
