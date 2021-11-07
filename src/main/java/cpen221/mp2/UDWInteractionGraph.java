@@ -1,12 +1,30 @@
 package cpen221.mp2;
 
-import java.util.List;
-import java.util.Set;
+import cpen221.mp2.Users.UndirectedUser;
+
+import java.util.*;
 
 public class UDWInteractionGraph {
 
+    private Hashtable<Integer, Hashtable<Integer, Interaction>> graph;
+    private HashSet<UndirectedUser> users;
     /* ------- Task 1 ------- */
     /* Building the Constructors */
+    /*
+    Rep Invariant: For every User in the set users, User.getUserID()
+                   is in graph.keySet()
+                   For every userID in graph.keySet(), there exists
+                   a User in users whose ID is userID
+                   TODO: user1, user2 is the same as user2, user1
+     */
+
+    public boolean checkRep(){
+        HashSet<Integer> userIDs = new HashSet<>();
+        for (UndirectedUser user: users) {
+            userIDs.add(user.getUserID());
+        }
+        return (userIDs.equals(graph.keySet()));
+    }
 
     /**
      * Creates a new UDWInteractionGraph using an email interaction file.
@@ -15,8 +33,42 @@ public class UDWInteractionGraph {
      * @param fileName the name of the file in the resources
      *                 directory containing email interactions
      */
+    //TODO: how do I put the reference for one object in both things
     public UDWInteractionGraph(String fileName) {
-        // TODO: Implement this constructor
+        users = new HashSet<UndirectedUser>();
+        graph = new Hashtable<Integer, Hashtable<Integer, Interaction>>();
+        ArrayList<Email> emailDataRaw = PreProcessing_ToRename.readerFunction(fileName);
+        for (Email email:emailDataRaw) {
+            addEmail(email);
+        }
+    }
+
+    private void addEmail(Email email){
+        int user1 = email.getSender(), user2 = email.getReceiver(), time = email.getTimeStamp();
+
+        UndirectedUser person1 = new UndirectedUser(user1);
+        UndirectedUser person2 = new UndirectedUser(user2);
+        person1.interactWithUser(user2);
+        person2.interactWithUser(user1);
+        addInteractionTime(user1, user2, time);
+        addInteractionTime(user2, user1, time);
+    }
+
+    private void addInteractionTime(int user1, int user2, int time){
+        if (graph.containsKey(user1)){
+            Hashtable<Integer, Interaction> user1Table = graph.get(user1);
+            if (user1Table.containsKey(user2)){
+                user1Table.get(user2).add(time);
+            }
+            else {
+                user1Table.put(user2, new Interaction(time));
+            }
+        }
+        else {
+            Hashtable<Integer, Interaction> newUser1Table = new Hashtable<>();// do I need to make a new one?
+            newUser1Table.put(user2, new Interaction(time));
+            graph.put(user1, newUser1Table);
+        }
     }
 
     /**
@@ -30,8 +82,40 @@ public class UDWInteractionGraph {
      *                   UDWInteractionGraph with send time t in the
      *                   t0 <= t <= t1 range.
      */
+    //Todo: seen maybe?
     public UDWInteractionGraph(UDWInteractionGraph inputUDWIG, int[] timeFilter) {
-        // TODO: Implement this constructor
+        int lowerBound = timeFilter[0], upperbound = timeFilter[1];
+        graph = new Hashtable<>();
+        users = new HashSet<>();
+        for (Integer user1 : inputUDWIG.graph.keySet()) {
+            for (Integer user2: inputUDWIG.graph.get(user1).keySet()) {
+
+                Interaction unfilteredInteraction = inputUDWIG.graph.get(user1).get(user2);
+                if(!(unfilteredInteraction.getMinTime() > upperbound ||
+                        unfilteredInteraction.getMaxTime() < lowerBound)) {
+                    Interaction filteredInteraction =
+                            new Interaction(unfilteredInteraction, lowerBound, upperbound);
+                    addInteraction(user1, user2, filteredInteraction);
+                    addInteraction(user2, user1, filteredInteraction);
+
+                    users.add(new UndirectedUser(user1));
+                    users.add(new UndirectedUser(user2));
+                }
+            }
+        }
+    }
+
+    private void addInteraction(Integer user1, Integer user2, Interaction interaction){
+        if(graph.keySet().contains(user1)){
+            if(!(graph.get(user1).keySet().contains(user2))){
+                graph.get(user1).put(user2, interaction);
+            }
+        }
+        else {
+            Hashtable<Integer, Interaction> user1Table = new Hashtable<>();
+            user1Table.put(user2,interaction);
+            graph.put(user1, user1Table);
+        }
     }
 
     /**
@@ -45,7 +129,22 @@ public class UDWInteractionGraph {
      *                   nor the receiver exist in userFilter.
      */
     public UDWInteractionGraph(UDWInteractionGraph inputUDWIG, List<Integer> userFilter) {
-        // TODO: Implement this constructor
+        graph = (Hashtable<Integer, Hashtable<Integer, Interaction>>) inputUDWIG.graph.clone();
+        users = (HashSet<UndirectedUser>) inputUDWIG.users.clone();
+        for (Integer sender:graph.keySet()) {
+            if(userFilter.contains(sender)){
+                graph.remove(sender);
+            }
+            for (Integer receiver: graph.get(sender).keySet()) {
+                if(userFilter.contains(receiver)){
+                    graph.remove(receiver);
+                }
+            }
+        }
+        for (Integer userID : userFilter) {
+            UndirectedUser user = new UndirectedUser(userID);
+            users.remove(user);
+        }
     }
 
     /**
@@ -62,8 +161,12 @@ public class UDWInteractionGraph {
      * in this UDWInteractionGraph.
      */
     public Set<Integer> getUserIDs() {
-        // TODO: Implement this getter method
-        return null;
+        HashSet<Integer> userIDs = new HashSet<>();
+        userIDs.addAll(graph.keySet());
+        for (Integer key: graph.keySet()) {
+            userIDs.addAll(graph.get(key).keySet());
+        }
+        return userIDs;
     }
 
     /**
@@ -72,6 +175,7 @@ public class UDWInteractionGraph {
      * @return the number of email interactions (send/receive) between user1 and user2
      */
     public int getEmailCount(int user1, int user2) {
+
         // TODO: Implement this getter method
         return 0;
     }
