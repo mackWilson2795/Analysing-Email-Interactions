@@ -5,22 +5,27 @@ import cpen221.mp2.Interaction;
 import java.util.*;
 
 public class TEMP_UserBuildingHelpers {
-
+//TODO: remo
     private static Hashtable<Integer, Hashtable<Integer, Interaction>> graph;
     private static HashMap<Integer, UndirectedUser> users;
     private static ArrayList<Integer> usersSortedByActivity;
 
-    public static void createUndirectedUserMap (){
-        Map<Integer, UndirectedUser> userMap = new HashMap<>();
+
+//TODO: getsent/ getrecieved replace with get interactions that takes in enum
+    public static HashMap<Integer, UndirectedUser>
+    createUserMapUDW (Hashtable<Integer, Hashtable<Integer, Interaction>> graph){
+        HashMap<Integer, UndirectedUser> userMap = new HashMap<>();
+
         for (Integer user1 : graph.keySet()) {
             userMap.put(user1, new UndirectedUser(user1));
             for (Integer user2: graph.get(user1).keySet()) {
                 userMap.get(user1).interactWithUser(user2, graph.get(user1).get(user2).getEmailCount());
             }
         }
+        return  userMap;
     }
 
-    public static void createUsersSortedByActivity() {
+    public static void createUsersSortedByActivity(HashMap) {
         // TODO: double check logic here - im tired
         List<User> userList = new ArrayList<>();
         for (Integer user : users.keySet()) {

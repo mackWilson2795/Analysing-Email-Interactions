@@ -9,7 +9,7 @@ public class UndirectedUser extends AbstractUser {
 
     public void interactWithUser(int id, int numEmails) {
         super.uniqueUsersInteractedWith.add(id);
-        totalInteractions++;
+        totalInteractions+= numEmails;
     }
 
     // getInteractions
