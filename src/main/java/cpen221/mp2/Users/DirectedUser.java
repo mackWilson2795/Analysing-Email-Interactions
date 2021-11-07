@@ -22,6 +22,7 @@ public class DirectedUser extends AbstractUser {
     public int getSent(){
         return sent;
     }
+
     // getReceiver
     public int getReceived(){
         return received;
