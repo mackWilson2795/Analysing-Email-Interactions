@@ -56,7 +56,7 @@ public class Interaction {
         if (upperBound > interaction.getMaxTime()){
             upperBound = interaction.getMaxTime();
         }
-        emailCount = interaction.emailCount;
+        emailCount = interaction.timeRangeInteractions(lowerBound, upperBound);
         times = new ArrayList<>();
         frequencyCount = new HashMap<Integer, Integer>();
         timeOrdered = (TreeSet<TimeNode>) interaction.timeOrdered.subSet(new TimeNode(lowerBound),

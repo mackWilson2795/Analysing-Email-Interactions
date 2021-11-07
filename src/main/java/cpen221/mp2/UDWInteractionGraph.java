@@ -45,6 +45,7 @@ public class UDWInteractionGraph {
 
     private void addEmail(Email email){
         int user1 = email.getSender(), user2 = email.getReceiver(), time = email.getTimeStamp();
+
         UndirectedUser person1 = new UndirectedUser(user1);
         UndirectedUser person2 = new UndirectedUser(user2);
         person1.interactWithUser(user2);
@@ -96,6 +97,7 @@ public class UDWInteractionGraph {
                             new Interaction(unfilteredInteraction, lowerBound, upperbound);
                     addInteraction(user1, user2, filteredInteraction);
                     addInteraction(user2, user1, filteredInteraction);
+
                     users.add(new UndirectedUser(user1));
                     users.add(new UndirectedUser(user2));
                 }
