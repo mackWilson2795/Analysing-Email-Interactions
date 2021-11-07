@@ -19,11 +19,8 @@ public class UDWInteractionGraph {
      */
 
     public boolean checkRep(){
-        HashSet<Integer> userIDs = new HashSet<>();
-        for (UndirectedUser user: users) {
-            userIDs.add(user.getUserID());
-        }
-        return (userIDs.equals(graph.keySet()));
+       // return (users.keySet().equals(graph.keySet()));
+        return false;
     }
 
     /**
