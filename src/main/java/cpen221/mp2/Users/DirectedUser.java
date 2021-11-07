@@ -18,6 +18,10 @@ public class DirectedUser extends AbstractUser {
         received++;
     }
 
+    public int getTotalInteractions(){
+        return sent + received;
+    }
+
     // getSent
     public int getSent(){
         return sent;

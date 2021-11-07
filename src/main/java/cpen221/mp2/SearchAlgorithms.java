@@ -30,8 +30,7 @@ public class SearchAlgorithms {
 
         if (found) {
             return searchOrder;
-        }
-        else {
+        } else {
             return null;
         }
     }

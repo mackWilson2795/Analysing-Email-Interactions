@@ -3,7 +3,7 @@ package cpen221.mp2.Users;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class AbstractUser {
+public abstract class AbstractUser implements User {
     protected Set<Integer> uniqueUsersInteractedWith;
     protected int userID;
 

@@ -17,5 +17,4 @@ public interface User {
 
     @Override
     int hashCode();
-
 }
