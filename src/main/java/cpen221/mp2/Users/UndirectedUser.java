@@ -7,7 +7,7 @@ public class UndirectedUser extends AbstractUser {
         super(id);
     }
 
-    public void interactsWithUser(int id) {
+    public void interactWithUser(int id) {
         super.uniqueUsersInteractedWith.add(id);
         totalInteractions++;
     }
