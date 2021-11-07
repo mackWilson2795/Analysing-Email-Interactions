@@ -99,5 +99,9 @@ public class Interaction {
         return timeOrdered.last().getTime();
     }
 
+    public int getEmailCount() {
+        return emailCount;
+    }
+
 
 }
