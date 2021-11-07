@@ -40,6 +40,7 @@ public class Interaction {
         frequencyCount = new HashMap<Integer, Integer>();
         emailCount = 0;
     }
+
     public Interaction(int time){
         timeOrdered = new TreeSet<TimeNode>();
         frequencyCount = new HashMap<Integer, Integer>();
@@ -47,9 +48,28 @@ public class Interaction {
         timeOrdered.add(new TimeNode(time, 1));
         emailCount = 1;
     }
-    public Interaction(Interaction interaction){
 
+    public Interaction(Interaction interaction, int lowerBound, int upperBound){
+        if (lowerBound < interaction.getMinTime()){
+            lowerBound = interaction.getMinTime();
+        }
+        if (upperBound > interaction.getMaxTime()){
+            upperBound = interaction.getMaxTime();
+        }
+        emailCount = interaction.timeRangeInteractions(lowerBound, upperBound);
+        times = new ArrayList<>();
+        frequencyCount = new HashMap<Integer, Integer>();
+        timeOrdered = (TreeSet<TimeNode>) interaction.timeOrdered.subSet(new TimeNode(lowerBound),
+                        true, new TimeNode(upperBound), true);// does creating these nodes add anything to the nodes at this existing time
+        //eg. another email count or something? test case to look at
+        for (TimeNode node: timeOrdered) {
+            frequencyCount.put(node.getTime(), node.getNumEmails());
+            for(int nthEmail = 0; nthEmail < node.getNumEmails(); nthEmail++){
+                times.add(node.getTime());
+            }
+        }
     }
+
     public void add(int time){
         if(frequencyCount.containsKey(time)) {
             TimeNode node = new TimeNode(time, frequencyCount.get(time));
@@ -71,10 +91,13 @@ public class Interaction {
         return sum;
     }
 
-    public void reduceTimeRange (int lowerBound, int upperBound){
-        for (TimeNode node: timeOrdered) {
-            if(lowerBound <= node.getTime() && node.getTime() <= upperBound){} //does subset for tree include edges?
-        }
+    public int getMinTime(){
+        return timeOrdered.first().getTime();
     }
+
+    public int getMaxTime() {
+        return timeOrdered.last().getTime();
+    }
+
 
 }
