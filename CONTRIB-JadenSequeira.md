@@ -5,4 +5,4 @@
 5. Implemented Task 4 Maximum Virus Spread
 6. Wrote Tests and Specifications
 7. Contributed to Interactions Class
-8. Implemented Helper Methods for Task 4
+8. Implemented Helper Methods for the Task 4
