@@ -126,9 +126,30 @@ public class UDWInteractionGraph {
      */
     public UDWInteractionGraph(DWInteractionGraph inputDWIG) {
         HashSet<Integer> userList = new HashSet<>();
+        graph = new Hashtable<>();
+        users = new HashMap<>();
+        NthMostActiveUser = new ArrayList<>();
         userList = inputDWIG.getUserIDs();
-
-
+        for (Integer user : userList) {
+            graph.put(user, new Hashtable<>());
+            for(Integer user2 : userList){
+                if(inputDWIG.isInteractive(user, user2) && inputDWIG.isInteractiveReceiver(user, user2)){
+                    Interaction interaction = new Interaction(inputDWIG.getUserInteraction(user,user2), inputDWIG.getUserInteractionReceiver(user,user2));
+                    addInteraction(user, user2, interaction);
+                    addInteraction(user2, user, interaction);
+                }
+                if(inputDWIG.isInteractive(user,user2)){
+                    addInteraction(user, user2, inputDWIG.getUserInteraction(user, user2));
+                    addInteraction(user2, user, inputDWIG.getUserInteraction(user, user2));
+                }
+                if(inputDWIG.isInteractiveReceiver(user,user2)){
+                    addInteraction(user, user2, inputDWIG.getUserInteractionReceiver(user, user2));
+                    addInteraction(user2, user, inputDWIG.getUserInteractionReceiver(user, user2));
+                }
+            }
+        }
+        users = UserBuildingHelpers.createUserMapUDW(graph);
+        NthMostActiveUser = UserBuildingHelpers.createUsersSortedByActivityUDW(new HashMap<>(users));
     }
 
     /**
@@ -229,9 +250,17 @@ public class UDWInteractionGraph {
        UDWInteractionGraph filtered = new UDWInteractionGraph(this, timeWindow);
        int[] activity = new int[2];
        activity[0] = filtered.users.keySet().size();
-       int sum = filtered.users.values().stream()
-               .map(UndirectedUser::getTotalInteractions)
-               .mapToInt(numInteractions -> numInteractions).sum();
+       int sum = 0;
+        for (Integer user1: graph.keySet()) {
+            for (Integer user2: graph.keySet()) {
+                if(graph.get(user1).containsKey(user2)){
+                    sum += graph.get(user1).get(user2).getInteractionCount();
+                    if(user1 == user2){
+                        sum += graph.get(user1).get(user2).getInteractionCount();
+                    }
+                }
+            }
+        }
        activity[1] = sum/2;
         return activity;
     }
