@@ -456,11 +456,19 @@ public class DWInteractionGraph {
      * returns [0, 0, 0].
      */
     public int[] ReportOnUser(int userID) {
-        DirectedUser user = userMap.get(userID);
-        Set<Integer> uniqueUserIDs = new HashSet<>();
-        uniqueUserIDs.addAll(user.getUniqueUsersSentTo());
-        uniqueUserIDs.addAll(user.getUniqueUsersReceivedFrom());
-        return new int[] {user.getSent(), user.getReceived(), uniqueUserIDs.size()};
+        if(userMap.containsKey(userID)) {
+            DirectedUser user = userMap.get(userID);
+            Set<Integer> uniqueUserIDs = new HashSet<>();
+            if (!(user.getUniqueUsersSentTo().isEmpty())) {
+                uniqueUserIDs.addAll(user.getUniqueUsersSentTo());
+            }
+            if (!(user.getUniqueUsersReceivedFrom().isEmpty())) {
+                uniqueUserIDs.addAll(user.getUniqueUsersReceivedFrom());
+            }
+            return new int[]{user.getSent(), user.getReceived(), uniqueUserIDs.size()};
+        } else{
+            return new int[]{0,0,0};
+        }
     }
 
     /**

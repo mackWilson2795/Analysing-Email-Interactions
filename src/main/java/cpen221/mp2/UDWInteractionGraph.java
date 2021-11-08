@@ -251,12 +251,12 @@ public class UDWInteractionGraph {
        int[] activity = new int[2];
        activity[0] = filtered.users.keySet().size();
        int sum = 0;
-        for (Integer user1: graph.keySet()) {
-            for (Integer user2: graph.keySet()) {
-                if(graph.get(user1).containsKey(user2)){
-                    sum += graph.get(user1).get(user2).getInteractionCount();
+        for (Integer user1: filtered.graph.keySet()) {
+            for (Integer user2: filtered.graph.keySet()) {
+                if(filtered.graph.get(user1).containsKey(user2)){
+                    sum += filtered.graph.get(user1).get(user2).getInteractionCount();
                     if(user1 == user2){
-                        sum += graph.get(user1).get(user2).getInteractionCount();
+                        sum += filtered.graph.get(user1).get(user2).getInteractionCount();
                     }
                 }
             }
