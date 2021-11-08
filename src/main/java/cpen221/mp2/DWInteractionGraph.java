@@ -1,6 +1,7 @@
 package cpen221.mp2;
 
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.util.Hashtable;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.TreeSet;
 
 public class DWInteractionGraph {
 
@@ -423,10 +425,49 @@ public class DWInteractionGraph {
      * if no path exists, should return null.
      */
     public List<Integer> BFS(int userID1, int userID2) {
-        // TODO: Implement this method
+        List<Integer> path = new ArrayList<Integer>();
+        List<Integer> nextPaths = new ArrayList<Integer>();
+        Set<Integer> adjacentUsers = new HashSet<Integer>();
+        Set<Integer> visited = new HashSet<Integer>();
+        int lastUser;
+
+        nextPaths.add(userID1);
+
+        while(nextPaths.size() > 0){
+
+            path.add(nextPaths.get(0));
+            nextPaths.remove(0);
+
+            lastUser = path.get(path.size()-1);
+            visited.add(lastUser);
+
+            if (lastUser == userID2){
+                return path;
+            }
+
+            if(interactionGraph.containsKey(lastUser)) {
+                adjacentUsers = interactionGraph.get(lastUser).keySet();
+            }
+            if(!interactionGraph.containsKey(lastUser)) {
+                adjacentUsers = new HashSet<Integer>();
+            }
+
+            List<Integer> nextUsers = new ArrayList<Integer>();
+
+            for(Integer user:adjacentUsers){
+                if(!path.contains(user) && !nextPaths.contains(user)){
+                    nextUsers.add(user);
+                }
+            }
+            Collections.sort(nextUsers);
+
+            for(Integer adjUser: nextUsers){
+                nextPaths.add(adjUser);
+            }
+        }
+
         return null;
     }
-
     /**
      * performs depth first search on the DWInteractionGraph object
      * to check path between user with userID1 and user with userID2.
