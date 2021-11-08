@@ -7,7 +7,7 @@ import java.util.*;
 public class UDWInteractionGraph {
 
     private Hashtable<Integer, Hashtable<Integer, Interaction>> graph;
-    private HashSet<UndirectedUser> users;
+    private HashMap<Integer, UndirectedUser> users;
     /* ------- Task 1 ------- */
     /* Building the Constructors */
     /*
@@ -19,8 +19,8 @@ public class UDWInteractionGraph {
      */
 
     public boolean checkRep(){
-       // return (users.keySet().equals(graph.keySet()));
-        return false;
+        HashSet<Integer> userIDs = new HashSet<>(users.keySet());
+        return (userIDs.equals(graph.keySet()));
     }
 
     /**
@@ -32,12 +32,13 @@ public class UDWInteractionGraph {
      */
     //TODO: how do I put the reference for one object in both things
     public UDWInteractionGraph(String fileName) {
-        users = new HashSet<UndirectedUser>();
+        users = new HashMap<Integer, UndirectedUser>();
         graph = new Hashtable<Integer, Hashtable<Integer, Interaction>>();
         ArrayList<Email> emailDataRaw = PreProcessing_ToRename.readerFunction(fileName);
         for (Email email:emailDataRaw) {
             addEmail(email);
         }
+        // TODO: initialize user map and list
     }
 
     private void addEmail(Email email){
@@ -45,8 +46,11 @@ public class UDWInteractionGraph {
 
         UndirectedUser person1 = new UndirectedUser(user1);
         UndirectedUser person2 = new UndirectedUser(user2);
+        // TODO: user stuff
+        /*
         person1.interactWithUser(user2);
         person2.interactWithUser(user1);
+         */
         addInteractionTime(user1, user2, time);
         addInteractionTime(user2, user1, time);
     }
@@ -83,7 +87,7 @@ public class UDWInteractionGraph {
     public UDWInteractionGraph(UDWInteractionGraph inputUDWIG, int[] timeFilter) {
         int lowerBound = timeFilter[0], upperbound = timeFilter[1];
         graph = new Hashtable<>();
-        users = new HashSet<>();
+        users = new HashMap<>();
         for (Integer user1 : inputUDWIG.graph.keySet()) {
             for (Integer user2: inputUDWIG.graph.get(user1).keySet()) {
 
@@ -95,16 +99,20 @@ public class UDWInteractionGraph {
                     addInteraction(user1, user2, filteredInteraction);
                     addInteraction(user2, user1, filteredInteraction);
 
+
+                    // TODO: init user list + map
+                    /*
                     users.add(new UndirectedUser(user1));
                     users.add(new UndirectedUser(user2));
+                     */
                 }
             }
         }
     }
 
     private void addInteraction(Integer user1, Integer user2, Interaction interaction){
-        if(graph.keySet().contains(user1)){
-            if(!(graph.get(user1).keySet().contains(user2))){
+        if(graph.containsKey(user1)){
+            if(!(graph.get(user1).containsKey(user2))){
                 graph.get(user1).put(user2, interaction);
             }
         }
@@ -127,7 +135,7 @@ public class UDWInteractionGraph {
      */
     public UDWInteractionGraph(UDWInteractionGraph inputUDWIG, List<Integer> userFilter) {
         graph = (Hashtable<Integer, Hashtable<Integer, Interaction>>) inputUDWIG.graph.clone();
-        users = (HashSet<UndirectedUser>) inputUDWIG.users.clone();
+        users = (HashMap<Integer, UndirectedUser>) inputUDWIG.users.clone();
         for (Integer sender:graph.keySet()) {
             if(userFilter.contains(sender)){
                 graph.remove(sender);
@@ -139,6 +147,7 @@ public class UDWInteractionGraph {
             }
         }
         for (Integer userID : userFilter) {
+            // TODO: fix this to work with userMap
             UndirectedUser user = new UndirectedUser(userID);
             users.remove(user);
         }
@@ -229,7 +238,10 @@ public class UDWInteractionGraph {
      * @return whether a path exists between the two users
      */
     public boolean PathExists(int userID1, int userID2) {
-        // TODO: Implement this method
+        // TODO: Implement this
+        /*
+        SearchAlgorithms.pathExists(users.get(userID1), users.get(userID2), )
+         */
         return false;
     }
 
