@@ -302,21 +302,19 @@ public class DWInteractionGraph {
     private void filterUserGraph(DWInteractionGraph inputDWIG, Set<Integer> users, List<Integer> filterUsers) {
         for (Integer sender : users) {
             for (Integer receiver : users) {
-                if (inputDWIG.isSender(sender)) {
-                    if (inputDWIG.isInteractive(sender, receiver)) {
-                        if (filterUsers.contains(sender) || filterUsers.contains(receiver)) {
-                            Interaction temp = inputDWIG.getUserInteraction(sender, receiver);
-                            List<Integer> times = temp.getTimes();
-                            Interaction placeHolder = new Interaction();
-                            for (Integer time : times) {
-                                placeHolder.addInteraction(time);
-                            }
-                            if (interactionGraph == null) {
-                                interactionGraph = new Hashtable<>();
-                            }
-                            interactionGraph.put(sender, new Hashtable<>());
-                            interactionGraph.get(sender).put(receiver, placeHolder);
+                if (inputDWIG.isSender(sender) && inputDWIG.isInteractive(sender, receiver)) {
+                    if (filterUsers.contains(sender) || filterUsers.contains(receiver)) {
+                        Interaction temp = inputDWIG.getUserInteraction(sender, receiver);
+                        List<Integer> times = temp.getTimes();
+                        Interaction placeHolder = new Interaction();
+                        for (Integer time : times) {
+                            placeHolder.addInteraction(time);
                         }
+                        if (interactionGraph == null) {
+                            interactionGraph = new Hashtable<>();
+                        }
+                        interactionGraph.put(sender, new Hashtable<>());
+                        interactionGraph.get(sender).put(receiver, placeHolder);
                     }
                 }
             }
