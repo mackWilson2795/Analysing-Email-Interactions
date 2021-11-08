@@ -1,14 +1,16 @@
 package cpen221.mp2;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeSet;
 
 public class Interaction {
     private TreeSet<TimeNode> timeOrdered;
     private HashMap<Integer, Integer> frequencyCount;
     private int emailCount;
-    private ArrayList<Integer> times;
+    private ArrayList<Integer> allTimes;
 //Todo: Change name to Interaction_Between2Users
     /* Rep Invariant:
         emailCount should always be equal to the sum of values
@@ -41,6 +43,7 @@ public class Interaction {
         timeOrdered = new TreeSet<TimeNode>();
         frequencyCount = new HashMap<Integer, Integer>();
         emailCount = 0;
+        allTimes = new ArrayList<Integer>();
     }
 
     public Interaction(int time){
@@ -49,6 +52,8 @@ public class Interaction {
         frequencyCount.put(time, 1);
         timeOrdered.add(new TimeNode(time, 1));
         emailCount = 1;
+        allTimes = new ArrayList<Integer>();
+        allTimes.add(time);
     }
 
     public Interaction(Interaction interaction, int lowerBound, int upperBound){
@@ -59,7 +64,7 @@ public class Interaction {
             upperBound = interaction.getMaxTime();
         }
         emailCount = interaction.timeRangeInteractions(lowerBound, upperBound);
-        times = new ArrayList<>();
+        allTimes = new ArrayList<>();
         frequencyCount = new HashMap<Integer, Integer>();
         timeOrdered = (TreeSet<TimeNode>) interaction.timeOrdered.subSet(new TimeNode(lowerBound),
                         true, new TimeNode(upperBound), true);// does creating these nodes add anything to the nodes at this existing time
@@ -67,12 +72,12 @@ public class Interaction {
         for (TimeNode node: timeOrdered) {
             frequencyCount.put(node.getTime(), node.getNumEmails());
             for(int nthEmail = 0; nthEmail < node.getNumEmails(); nthEmail++){
-                times.add(node.getTime());
+                allTimes.add(node.getTime());
             }
         }
     }
 
-    public void add(int time){
+    public void addInteraction(int time){
         if(frequencyCount.containsKey(time)) {
             TimeNode node = new TimeNode(time, frequencyCount.get(time));
             timeOrdered.remove(node);
@@ -101,8 +106,12 @@ public class Interaction {
         return timeOrdered.last().getTime();
     }
 
-    public int getEmailCount() {
+    public int getInteractionCount() {
         return emailCount;
     }
-
+    public List<Integer> getTimes() {
+        ArrayList<Integer> copy = new ArrayList<>(allTimes);
+        return copy;
+    }
 }
+
