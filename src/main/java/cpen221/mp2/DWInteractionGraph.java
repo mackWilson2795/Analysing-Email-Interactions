@@ -36,6 +36,9 @@ public class DWInteractionGraph {
         interactionGraph = new Hashtable<>();
         interactionGraphReceiver = new Hashtable<>();
 
+        ArrayList<Email> emailDataRaw = ReadingMethods.readerFunction(fileName);
+        //TODO: start here
+
         try {
             File file = new File(fileName);
             Scanner input = new Scanner(file);
