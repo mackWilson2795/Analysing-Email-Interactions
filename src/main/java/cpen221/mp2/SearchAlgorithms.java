@@ -88,10 +88,7 @@ public class SearchAlgorithms {
         if (mapOfAllUsers.keySet().isEmpty() || !mapOfAllUsers.containsKey(user1.getUserID())){
             return new HashSet<>(user1.getUserID());
         }
-
-        // TODO: very important to verify this
         DFS(user1, new UndirectedUser(-1), mapOfAllUsers);
-
         return new HashSet<>(seen);
     }
 

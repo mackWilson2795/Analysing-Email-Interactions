@@ -19,6 +19,8 @@ public class DirectedUser extends AbstractUser implements User {
      */
     public DirectedUser (int id) {
         super(id);
+        uniqueUsersSentTo = new HashSet<>();
+        uniqueUsersReceivedFrom = new HashSet<>();
     }
 
     /**
