@@ -213,8 +213,13 @@ public class UDWInteractionGraph {
      */
     public int[] ReportOnUser(int userID) {
         int[] report = new int[2];
-        report[0] = users.get(userID).getTotalInteractions();
-        report[1] = users.get(userID).getSetOfAdjacentUsers().size();
+        if(!(users.keySet().contains(userID))){
+            report[0]=0;
+            report[1]=0;
+        } else {
+            report[0] = users.get(userID).getTotalInteractions();
+            report[1] = users.get(userID).getSetOfInteractedUsers().size();
+        }
         return report;
     }
 
