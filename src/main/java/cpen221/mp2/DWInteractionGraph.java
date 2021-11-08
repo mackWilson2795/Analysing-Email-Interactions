@@ -467,6 +467,7 @@ public class DWInteractionGraph {
         int maxRange = hours*minPerHour*secondsPerMin;
         TreeSet<Integer> maxInfections = new TreeSet<Integer>();
 
+        //Start here if implementing components
         for(Integer sender: senders){
             Set<Integer> receivers = new HashSet<Integer>(interactionGraph.get(sender).keySet());
             Set<Integer> sendTimes = new HashSet<Integer>();
