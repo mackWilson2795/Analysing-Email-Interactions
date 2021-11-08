@@ -218,7 +218,7 @@ public class UDWInteractionGraph {
             report[1]=0;
         } else {
             report[0] = users.get(userID).getTotalInteractions();
-            report[1] = users.get(userID).getSetOfInteractedUsers().size();
+            report[1] = users.get(userID).getSetOfAdjacentUsers().size();
         }
         return report;
     }
