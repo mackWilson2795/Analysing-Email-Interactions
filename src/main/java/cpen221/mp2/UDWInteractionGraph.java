@@ -1,7 +1,6 @@
 package cpen221.mp2;
 
 import cpen221.mp2.Users.UndirectedUser;
-
 import java.util.*;
 
 public class UDWInteractionGraph {
@@ -34,7 +33,7 @@ public class UDWInteractionGraph {
     public UDWInteractionGraph(String fileName) {
         users = new HashMap<Integer, UndirectedUser>();
         graph = new Hashtable<Integer, Hashtable<Integer, Interaction>>();
-        ArrayList<Email> emailDataRaw = PreProcessing_ToRename.readerFunction(fileName);
+        ArrayList<Email> emailDataRaw = ReadingMethods.readerFunction(fileName);
         for (Email email:emailDataRaw) {
             addEmail(email);
         }

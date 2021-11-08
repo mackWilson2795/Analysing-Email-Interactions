@@ -9,7 +9,7 @@ import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-public class PreProcessing_ToRename {
+public class ReadingMethods {
 
     /** Reader function
      * Give it an input file (.txt)

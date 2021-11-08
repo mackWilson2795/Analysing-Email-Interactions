@@ -11,6 +11,14 @@ public class SearchAlgorithms {
     private static List<Integer> searchOrder;
     private static boolean found;
 
+    /**
+     * Performs a depth first search on a Map of Integers to AbstractUsers
+     *
+     * @param startUser
+     * @param endUser
+     * @param mapOfAllUsers
+     * @return
+     */
     // todo: this could take in ints as well - decide what is easiest
     public static List<Integer> DFS(AbstractUser startUser, AbstractUser endUser, Map<Integer, AbstractUser> mapOfAllUsers){
 
