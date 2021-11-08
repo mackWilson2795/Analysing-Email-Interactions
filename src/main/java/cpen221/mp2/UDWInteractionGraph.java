@@ -59,7 +59,7 @@ public class UDWInteractionGraph {
         if (graph.containsKey(user1)){
             Hashtable<Integer, Interaction> user1Table = graph.get(user1);
             if (user1Table.containsKey(user2)){
-                user1Table.get(user2).add(time);
+                user1Table.get(user2).addInteraction(time);
             }
             else {
                 user1Table.put(user2, new Interaction(time));
