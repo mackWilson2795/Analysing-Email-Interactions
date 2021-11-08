@@ -11,6 +11,7 @@ import cpen221.mp2.Users.UserBuildingHelpers;
 //todo: ENUM comparator for jaden, hashmap user integration in UDW and DW finish UDW
 //TODO: worries with using clone in user filter constructor;
 //todo: check when initializing users and graph don't be redundant, just new HashMap<>()
+//todo: check edges i.e. when users arent even in the graph
 
 public class UDWInteractionGraph {
 
@@ -177,6 +178,9 @@ public class UDWInteractionGraph {
      * @return the number of email interactions (send/receive) between user1 and user2
      */
     public int getEmailCount(int user1, int user2) {
+        if(!(users.keySet().contains(user1) && users.keySet().contains(user2))){
+            return 0;
+        }
         return graph.get(user1).get(user2).getInteractionCount();
     }
 
@@ -189,8 +193,14 @@ public class UDWInteractionGraph {
      *  [NumberOfUsers, NumberOfEmailTransactions]
      */
     public int[] ReportActivityInTimeWindow(int[] timeWindow) {
-        // TODO: Implement this method
-        return null;
+       UDWInteractionGraph filtered = new UDWInteractionGraph(this, timeWindow);
+       int[] activity = new int[2];
+       activity[1] = filtered.users.keySet().size();
+       int sum = filtered.users.values().stream()
+               .map(UndirectedUser::getTotalInteractions)
+               .mapToInt(numInteractions -> numInteractions).sum();
+       activity[2] = sum/2;
+        return activity;
     }
 
     /**
@@ -202,8 +212,10 @@ public class UDWInteractionGraph {
      * returns [0, 0].
      */
     public int[] ReportOnUser(int userID) {
-        // TODO: Implement this method
-        return null;
+        int[] report = new int[2];
+        report[1] = users.get(userID).getTotalInteractions();
+        report[2] = users.get(userID).getSetOfAdjacentUsers().size();
+        return report;
     }
 
     /**

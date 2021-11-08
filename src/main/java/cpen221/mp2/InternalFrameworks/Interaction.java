@@ -101,7 +101,7 @@ public class Interaction {
 
     public int timeRangeInteractions (int lowerBound, int upperBound){
         int sum = 0;
-        for (TimeNode node: timeOrdered.subSet(new TimeNode(lowerBound), new TimeNode(upperBound))) {
+        for (TimeNode node: timeOrdered.subSet(new TimeNode(lowerBound), true, new TimeNode(upperBound), true)) {
             sum += node.getNumEmails();
         }
         return sum;
