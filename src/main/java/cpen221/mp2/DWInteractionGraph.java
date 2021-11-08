@@ -6,9 +6,7 @@ import cpen221.mp2.InternalFrameworks.ReadingMethods;
 import cpen221.mp2.Users.DirectedUser;
 import cpen221.mp2.Users.UserBuildingHelpers;
 
-import java.io.FileNotFoundException;
 import java.util.*;
-import java.io.File;
 
 public class DWInteractionGraph {
 
@@ -386,11 +384,13 @@ public class DWInteractionGraph {
      */
     public int NthMostActiveUser(int N, SendOrReceive interactionType) {
         // TODO: MAKE THIS WORK
-
-        if (interactionType == SendOrReceive.SEND){
+        if (interactionType == SendOrReceive.SEND && N < NthMostActiveSender.size()){
             return NthMostActiveSender.get(N - 1);
-        } else {
+        } else if (interactionType == SendOrReceive.RECEIVE
+                                   && N < NthMostActiveReceiver.size()) {
             return NthMostActiveReceiver.get(N - 1);
+        } else {
+            return -1;
         }
     }
 
@@ -413,7 +413,6 @@ public class DWInteractionGraph {
         nextPaths.add(userID1);
 
         while(nextPaths.size() > 0){
-
             path.add(nextPaths.get(0));
             nextPaths.remove(0);
 
@@ -475,7 +474,7 @@ public class DWInteractionGraph {
         int maxRange = hours*minPerHour*secondsPerMin;
         TreeSet<Integer> maxInfections = new TreeSet<Integer>();
 
-        //Start here if implementing components
+        // TODO: Start here if implementing components
         for(Integer sender: senders){
             Set<Integer> receivers = new HashSet<Integer>(interactionGraph.get(sender).keySet());
             Set<Integer> sendTimes = new HashSet<Integer>();
@@ -492,21 +491,20 @@ public class DWInteractionGraph {
     }
 
     private int TimeBFS(int userID1, int userID2, int maxSeconds, int startTime) {
-        List<List<Integer>> path = new ArrayList<List<Integer>>();
-        List<List<Integer>> nextPaths = new ArrayList<List<Integer>>();
+        List<List<Integer>> path = new ArrayList<>();
+        List<List<Integer>> nextPaths = new ArrayList<>();
         Set<Integer> adjacentUsers = new HashSet<>();
         Set<Integer> visited = new HashSet<>();
         List<Integer> lastUser;
         int maxTime = startTime + maxSeconds;
 
-        List<Integer> startingNode = new ArrayList<Integer>();
+        List<Integer> startingNode = new ArrayList<>();
         startingNode.add(userID1);
         startingNode.add(startTime);
 
         nextPaths.add(startingNode);
 
         while(nextPaths.size() > 0){
-
             path.add(nextPaths.get(0));
             nextPaths.remove(0);
 
@@ -524,10 +522,10 @@ public class DWInteractionGraph {
                 adjacentUsers = new HashSet<>();
             }
 
-            List<List<Integer>> nextUsers = new ArrayList<List<Integer>>();
+            List<List<Integer>> nextUsers = new ArrayList<>();
 
-            List pathElements = new ArrayList<Integer>();
-            List nextPathElements = new ArrayList<Integer>();
+            List<Integer> pathElements = new ArrayList<>();
+            List<Integer> nextPathElements = new ArrayList<>();
 
             for(List<Integer> element: path){
                 pathElements.add(element.get(0));
@@ -540,7 +538,7 @@ public class DWInteractionGraph {
                 if ((!pathElements.contains(user) && !nextPathElements.contains(user))) {
                     int nextTime = interactionGraph.get(lastUser.get(0)).get(user).getNextTime(lastUser.get(1));
                     if (nextTime >= 0 && nextTime <= maxTime) {
-                        ArrayList<Integer> node = new ArrayList<Integer>();
+                        ArrayList<Integer> node = new ArrayList<>();
                         node.add(user);
                         node.add(nextTime);
                         nextUsers.add(node);
@@ -550,7 +548,7 @@ public class DWInteractionGraph {
                     int index = pathElements.indexOf(user);
                     int nextTime = interactionGraph.get(lastUser.get(0)).get(user).getNextTime(lastUser.get(1));
                     if(nextTime < path.get(index).get(1)){
-                        ArrayList<Integer> node = new ArrayList<Integer>();
+                        ArrayList<Integer> node = new ArrayList<>();
                         node.add(user);
                         node.add(nextTime);
                         nextUsers.add(node);
@@ -562,7 +560,7 @@ public class DWInteractionGraph {
                     int index = nextPathElements.indexOf(user);
                     int nextTime = interactionGraph.get(lastUser.get(0)).get(user).getNextTime(lastUser.get(1));
                     if (nextTime < nextPaths.get(index).get(1)) {
-                        ArrayList<Integer> node = new ArrayList<Integer>();
+                        ArrayList<Integer> node = new ArrayList<>();
                         node.add(user);
                         node.add(nextTime);
                         nextUsers.add(node);
@@ -571,7 +569,7 @@ public class DWInteractionGraph {
                     }
                 }
                 else{
-
+                    // TODO: empty else block can we remove?
                 }
             }
             nextPaths.addAll(nextUsers);

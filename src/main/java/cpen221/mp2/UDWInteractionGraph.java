@@ -128,9 +128,13 @@ public class UDWInteractionGraph {
 
 
     private void addEmail(Email email){
-        int user1 = email.getSender(), user2 = email.getReceiver(), time = email.getTimeStamp();
+        int user1 = email.getSender();
+        int user2 = email.getReceiver();
+        int time = email.getTimeStamp();
         addInteractionTime(user1, user2, time);
-        addInteractionTime(user2, user1, time);
+        if (user1 != user2){
+            addInteractionTime(user2, user1, time);
+        }
     }
 
     private void addInteractionTime(int user1, int user2, int time){
