@@ -15,7 +15,7 @@ public class TEMP_UserBuildingHelpers {
         for (Integer user1 : graph.keySet()) {
             userMap.put(user1, new UndirectedUser(user1));
             for (Integer user2: graph.get(user1).keySet()) {
-                userMap.get(user1).interactWithUser(user2, graph.get(user1).get(user2).getEmailCount());
+                userMap.get(user1).interactWithUser(user2, graph.get(user1).get(user2).getInteractionCount());
             }
         }
     }

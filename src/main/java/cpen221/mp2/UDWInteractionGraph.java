@@ -136,7 +136,7 @@ public class UDWInteractionGraph {
     public UDWInteractionGraph(UDWInteractionGraph inputUDWIG, List<Integer> userFilter) {
         graph = (Hashtable<Integer, Hashtable<Integer, Interaction>>) inputUDWIG.graph.clone();
         users = (HashMap<Integer, UndirectedUser>) inputUDWIG.users.clone();
-        for (Integer sender:graph.keySet()) {
+        for (Integer sender : graph.keySet()) {
             if(userFilter.contains(sender)){
                 graph.remove(sender);
             }

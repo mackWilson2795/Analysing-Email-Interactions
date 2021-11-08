@@ -6,12 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Scanner;
-import java.io.IOException;
 import java.io.File;
 import java.util.Hashtable;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.TreeSet;
 
 public class DWInteractionGraph {
 
@@ -42,7 +39,6 @@ public class DWInteractionGraph {
 
             File file = new File(fileName);
             Scanner input = new Scanner(file);
-
 
             int count = 0;
             int sender = -1;
@@ -112,7 +108,7 @@ public class DWInteractionGraph {
         users = inputDWIG.getUserIDs();
         userIDs = inputDWIG.getUserIDs();
 
-        for(Integer sender:users) {
+        for(Integer sender : users) {
             for (Integer receiver : users) {
                 if (inputDWIG.isSender(sender)) {
                     if (inputDWIG.isInteractive(sender, receiver)) {
@@ -150,7 +146,6 @@ public class DWInteractionGraph {
                         Interaction placeHolder = new Interaction();
 
                         int count = 0;
-
 
                         for(Integer time: times){
                             if(time >= timeFilter[0] && time <= timeFilter[1]){
@@ -244,8 +239,6 @@ public class DWInteractionGraph {
         return false;
     }
 
-
-
     /**
      * Creates a new DWInteractionGraph from a DWInteractionGraph object
      * and considering a list of User IDs.
@@ -263,7 +256,7 @@ public class DWInteractionGraph {
         userIDs = inputDWIG.getUserIDs();
         Set<Integer> filterUsers = new HashSet<Integer>(userFilter);
 
-        for(Integer sender:users) {
+        for(Integer sender :users) {
             for (Integer receiver : users) {
                 if (inputDWIG.isSender(sender)) {
                     if (inputDWIG.isInteractive(sender, receiver)) {
@@ -317,7 +310,6 @@ public class DWInteractionGraph {
                 userIDs.remove(sender);
             }
         }
-
 
         HashSet<Integer> temporary = new HashSet<Integer>();
 
