@@ -12,7 +12,7 @@ public interface User {
 
     int getTotalInteractions();
 
-    HashSet<Integer> getSetOfInteractedUsers();
+    HashSet<Integer> getSetOfAdjacentUsers();
 
     @Override
     boolean equals(Object that);

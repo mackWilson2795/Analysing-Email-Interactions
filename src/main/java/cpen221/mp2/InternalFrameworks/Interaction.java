@@ -1,4 +1,4 @@
-package cpen221.mp2;
+package cpen221.mp2.InternalFrameworks;
 
 
 import java.util.ArrayList;
@@ -40,10 +40,10 @@ public class Interaction {
     //TODO: internal variable for senders or receivers?
 
     public Interaction(){
-        timeOrdered = new TreeSet<TimeNode>();
-        frequencyCount = new HashMap<Integer, Integer>();
+        timeOrdered = new TreeSet<>();
+        frequencyCount = new HashMap<>();
         emailCount = 0;
-        allTimes = new ArrayList<Integer>();
+        allTimes = new ArrayList<>();
     }
     public Interaction(int interactions, ArrayList<Integer> times){
         this();
@@ -119,8 +119,7 @@ public class Interaction {
         return emailCount;
     }
     public List<Integer> getTimes() {
-        ArrayList<Integer> copy = new ArrayList<>(allTimes);
-        return copy;
+        return new ArrayList<>(allTimes);
     }
 }
 

@@ -2,11 +2,12 @@ package cpen221.mp2;
 
 import cpen221.mp2.Users.AbstractUser;
 import cpen221.mp2.Users.UndirectedUser;
+import cpen221.mp2.Users.User;
 
 import java.util.*;
 
 public class SearchAlgorithms {
-    private static Map<Integer, AbstractUser> userMap;
+    private static Map<Integer, User> userMap;
     private static HashSet<Integer> seen;
     private static List<Integer> searchOrder;
     private static boolean found;
@@ -24,7 +25,7 @@ public class SearchAlgorithms {
      *         the users in the map were visited during the search
      */
     // todo: this could take in ints as well - decide what is easiest
-    public static List<Integer> DFS(AbstractUser startUser, AbstractUser endUser, Map<Integer, AbstractUser> mapOfAllUsers){
+    private static List<Integer> DFS(User startUser, User endUser, Map<Integer, User> mapOfAllUsers){
 
         found = false;
         userMap = new HashMap<>(mapOfAllUsers);
@@ -44,7 +45,7 @@ public class SearchAlgorithms {
         }
     }
 
-    public static void recursiveDFSHelper(AbstractUser startUser, AbstractUser endUser){
+    private static void recursiveDFSHelper(User startUser, User endUser){
         // todo: remove
         //      Set<AbstractUser> adjacentUsers = new HashSet<>();
         seen.add(startUser.getUserID());
@@ -57,7 +58,7 @@ public class SearchAlgorithms {
 
         // TODO: fix to work with directed
         List<Integer> adjacentUsers = new ArrayList<>();
-        for (Integer i: startUser.getSetOfInteractedUsers()) {
+        for (Integer i: startUser.getSetOfAdjacentUsers()) {
             if (!seen.contains(i)) {
                 adjacentUsers.add(i);
             }
@@ -74,7 +75,7 @@ public class SearchAlgorithms {
         }
     }
 
-    public static boolean pathExists (AbstractUser user1, AbstractUser user2, Map<Integer, AbstractUser> mapOfAllUsers){
+    public static boolean pathExists (User user1, User user2, Map<Integer, User> mapOfAllUsers){
         if (mapOfAllUsers.keySet().isEmpty() || !mapOfAllUsers.containsKey(user1.getUserID())
                                              || !mapOfAllUsers.containsKey(user2.getUserID())){
             return false;
@@ -85,7 +86,7 @@ public class SearchAlgorithms {
         return found;
     }
 
-    public static HashSet<Integer> findComponent (AbstractUser user1, Map<Integer, AbstractUser> mapOfAllUsers){
+    public static HashSet<Integer> findComponent (User user1, Map<Integer, User> mapOfAllUsers){
         if (mapOfAllUsers.keySet().isEmpty() || !mapOfAllUsers.containsKey(user1.getUserID())){
             return new HashSet<>(user1.getUserID());
         }
