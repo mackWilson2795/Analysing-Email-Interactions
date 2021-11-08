@@ -45,6 +45,7 @@ public class SearchAlgorithms {
             return;
         }
 
+        // TODO: fix to work with directed
         List<Integer> adjacentUsers = new ArrayList<>();
         for (Integer i: startUser.getSetOfInteractedUsers()) {
             if (!seen.contains(i)) {
@@ -82,6 +83,6 @@ public class SearchAlgorithms {
         // TODO: very important to verify this
         DFS(user1, new UndirectedUser(-1), mapOfAllUsers);
 
-        return seen;
+        return new HashSet<>(seen);
     }
 }

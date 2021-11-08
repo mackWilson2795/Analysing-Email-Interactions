@@ -1,5 +1,7 @@
 package cpen221.mp2.Users;
 
+import cpen221.mp2.SendOrReceive;
+
 import java.util.HashSet;
 
 public interface User {

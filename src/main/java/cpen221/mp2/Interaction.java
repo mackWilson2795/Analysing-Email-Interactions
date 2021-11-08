@@ -36,6 +36,7 @@ public class Interaction {
         return (emailCount == totalFrequencyCount && emailCount == totalTimeOrdered);
     }
     //TODO: internal variable for senders or receivers?
+
     public Interaction(){
         timeOrdered = new TreeSet<TimeNode>();
         frequencyCount = new HashMap<Integer, Integer>();
@@ -103,6 +104,5 @@ public class Interaction {
     public int getEmailCount() {
         return emailCount;
     }
-
 
 }
