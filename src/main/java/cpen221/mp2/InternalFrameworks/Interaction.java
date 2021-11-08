@@ -60,7 +60,11 @@ public class Interaction {
             this.addInteraction(time);
         }
     }
-    // TODO: specs
+
+    /**
+     * Creates a copy of a given interaction
+     * @param interaction interaction to copy
+     */
     public Interaction(Interaction interaction){
         timeOrdered = new TreeSet<>();
         frequencyCount = new HashMap<>();
