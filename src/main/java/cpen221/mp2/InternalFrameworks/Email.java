@@ -31,19 +31,6 @@ public class Email {
     }
 
     /**
-     * Creates an email from three integers:
-     *
-     * @param sender id of the sender
-     * @param receiver id of the receiver
-     * @param timeStamp timeStamp of the email
-     */
-    public Email (int sender, int receiver, int timeStamp){
-        this.sender = sender;
-        this.receiver = receiver;
-        this.timeStamp = timeStamp;
-    }
-
-    /**
      * Creates an Email from a String containing at least three integers.
      * The first three integers in the string will be used, where the:
      *     First integer is the id of the sender

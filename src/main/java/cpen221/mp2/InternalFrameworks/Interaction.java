@@ -124,8 +124,7 @@ public class Interaction {
         }
         emailCount = interaction.timeRangeInteractions(lowerBound, upperBound);
         timeOrdered = (TreeSet<TimeNode>) interaction.timeOrdered.subSet(new TimeNode(lowerBound),
-                        true, new TimeNode(upperBound), true);// does creating these nodes add anything to the nodes at this existing time
-        //eg. another email count or something? test case to look at
+                        true, new TimeNode(upperBound), true);
         for (TimeNode node: timeOrdered) {
             frequencyCount.put(node.getTime(), node.getNumEmails());
             for(int nthEmail = 0; nthEmail < node.getNumEmails(); nthEmail++){

@@ -9,17 +9,9 @@ import cpen221.mp2.Users.UserBuildingHelpers;
 import java.util.*;
 
 public class DWInteractionGraph {
-
-//Notes:
-    // TODO
-    //1. added another hashtable,hashtable structure in the DWInteraction class but this time for receiver to sender
-
-    /* ------- Task 1 ------- */
-    /* Building the Constructors */
     private Hashtable<Integer, Hashtable<Integer, Interaction>> interactionGraph;
     private Hashtable<Integer, Hashtable<Integer, Interaction>> interactionGraphReceiver;
     private Set<Integer> userIDs;
-    // TODO: set up these objects
     private HashMap<Integer, DirectedUser> userMap;
     private ArrayList<Integer> NthMostActiveSender;
     private ArrayList<Integer> NthMostActiveReceiver;
@@ -480,7 +472,6 @@ public class DWInteractionGraph {
      * tie, secondarily sorts the tied User IDs in ascending order.
      */
     public int NthMostActiveUser(int N, SendOrReceive interactionType) {
-        // TODO: MAKE THIS WORK
         if (interactionType == SendOrReceive.SEND && N <= NthMostActiveSender.size()){
             return NthMostActiveSender.get(N - 1);
         } else if (interactionType == SendOrReceive.RECEIVE

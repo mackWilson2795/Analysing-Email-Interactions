@@ -3,8 +3,6 @@ package cpen221.mp2.InternalFrameworks;
 public class TimeNode implements Comparable<TimeNode> {
     private final int time;
     private  int numEmails;
-    //TODO : Review safety of adding/ how we will work with this;
-    // TODO: specs
 
     /* Abstraction Function:
         numEmails = the number of emails sent

@@ -6,7 +6,6 @@ import cpen221.mp2.InternalFrameworks.ReadingMethods;
 import cpen221.mp2.Users.UndirectedUser;
 import java.util.*;
 
-import cpen221.mp2.Users.User;
 import cpen221.mp2.Users.UserBuildingHelpers;
 
 
@@ -183,7 +182,7 @@ public class UDWInteractionGraph {
             }
         }
         else {
-            Hashtable<Integer, Interaction> newUser1Table = new Hashtable<>(); // TODO:
+            Hashtable<Integer, Interaction> newUser1Table = new Hashtable<>();
             newUser1Table.put(user2, new Interaction(time));
             graph.put(user1, newUser1Table);
         }
@@ -229,13 +228,11 @@ public class UDWInteractionGraph {
      * @return the number of email interactions (send/receive) between user1 and user2
      */
     public int getEmailCount(int user1, int user2) {
-        if(!(users.keySet().contains(user1) && users.keySet().contains(user2))){
+        if(!(users.containsKey(user1) && users.containsKey(user2))){
             return 0;
         }
         return graph.get(user1).get(user2).getInteractionCount();
     }
-
-    /* ------- Task 2 ------- */
 
     /**
      * @param timeWindow is an int array of size 2 [t0, t1]
@@ -252,7 +249,7 @@ public class UDWInteractionGraph {
             for (Integer user2: filtered.graph.keySet()) {
                 if(filtered.graph.get(user1).containsKey(user2)){
                     sum += filtered.graph.get(user1).get(user2).getInteractionCount();
-                    if(user1 == user2){
+                    if(Objects.equals(user1, user2)){
                         sum += filtered.graph.get(user1).get(user2).getInteractionCount();
                     }
                 }
@@ -293,7 +290,6 @@ public class UDWInteractionGraph {
         return NthMostActiveUser.get(N-1);
     }
 
-    /* ------- Task 3 ------- */
 
     /**
      * @return the number of completely disjoint graph

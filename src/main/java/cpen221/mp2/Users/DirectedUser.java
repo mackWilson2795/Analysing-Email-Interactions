@@ -53,16 +53,13 @@ public class DirectedUser extends AbstractUser implements User {
         uniqueUsersReceivedFrom = new HashSet<>(user.uniqueUsersReceivedFrom);
     }
 
-    // TODO: I want to turn these next two methods into overloads of the same method that takes an ENUM as a modifier
-    //       to determine sent vs received - does that make this an invalid subtype?
-
     /**
      * Document the sending of a given number of emails from
      * this user to another user, given the receiver's ID.
      *
      * @param receiver the ID associated with the receiver
      * @param numEmails the number of emails to be sent
-     *                  requires: numEmails is non-negative //TODO: might be able to remove this requires
+     *                  requires: numEmails is non-negative
      */
     public void sendEmail (int receiver, int numEmails){
         super.setOfAdjacentUsers.add(receiver);
@@ -106,7 +103,7 @@ public class DirectedUser extends AbstractUser implements User {
     }
 
     /**
-     * // TODO: this ok?
+     *
      * @return the total number of emails this user has sent and received
      */
     public int getTotalInteractions(){

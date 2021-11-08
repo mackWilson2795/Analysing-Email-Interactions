@@ -7,7 +7,6 @@ public abstract class AbstractUser implements User {
     protected Set<Integer> setOfAdjacentUsers;
     protected int userID;
 
-    // TODO: rep invars or abs functs?
     /* Abstraction Function:
         setOfAdjacentUsers = the set of all users which this user has
                              interacted with.

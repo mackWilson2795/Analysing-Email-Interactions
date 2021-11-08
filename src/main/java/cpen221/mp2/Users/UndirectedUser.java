@@ -30,35 +30,13 @@ public class UndirectedUser extends AbstractUser implements User {
     }
 
     /**
-     * Constructs a new undirected user given another undirected user
-     *
-     * @param user an undirected user object
-     */
-    public UndirectedUser(UndirectedUser user){
-        super(user.userID);
-        totalInteractions = user.totalInteractions;
-        setOfAdjacentUsers = new HashSet<>(user.setOfAdjacentUsers);
-    }
-
-    /**
-     * Constructs a new undirected user given a directed user
-     *
-     * @param user a directed user object
-     */
-    public UndirectedUser(DirectedUser user) {
-        super(user.userID);
-        totalInteractions = user.getTotalInteractions();
-        setOfAdjacentUsers = new HashSet<>(user.setOfAdjacentUsers);
-    }
-
-    /**
      * Document a given number of emails between this user
      * and another user, given the other's id and the number
      * of interactions.
      *
      * @param id the ID associated with the other user
      * @param numEmails the number of emails
-     *                  requires: numEmails is non-negative // TODO: might be able to remove this requires statement?
+     *                  requires: numEmails is non-negative
      */
     public void interactWithUser(int id, int numEmails) {
         super.setOfAdjacentUsers.add(id);
