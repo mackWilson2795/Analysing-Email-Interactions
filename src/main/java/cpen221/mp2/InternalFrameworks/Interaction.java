@@ -11,13 +11,6 @@ public class Interaction {
     private HashMap<Integer, Integer> frequencyCount;
     private int emailCount;
     private ArrayList<Integer> allTimes;
-//Todo: Change name to Interaction_Between2Users
-    /* Rep Invariant:
-        emailCount should always be equal to the sum of values
-        stored in the frequencyCount map.
-        emailCount should also always be equal to the sum of
-        TimeNode.getNumEmails() for each TimeNode in timeOrdered.
-     */
 
     /* Abstraction Function:
         timeOrdered = representation of every email sent
@@ -26,7 +19,13 @@ public class Interaction {
                          the number of emails between the two users at that time
         emailCount = number of emails between the two users
      */
-    //Todo: copy constructor
+
+    /* Rep Invariant:
+        emailCount should always be equal to the sum of values stored
+         in the frequencyCount map.
+        emailCount should always be equal to the sum of TimeNode.getNumEmails()
+         for each TimeNode in timeOrdered.
+     */
     public boolean checkRep(){
         int totalFrequencyCount = 0, totalTimeOrdered = 0;
         for (TimeNode time:timeOrdered) {
@@ -37,14 +36,24 @@ public class Interaction {
         }
         return (emailCount == totalFrequencyCount && emailCount == totalTimeOrdered);
     }
-    //TODO: internal variable for senders or receivers?
 
+    /**
+     * Create a new empty interaction object
+     */
     public Interaction(){
         timeOrdered = new TreeSet<>();
         frequencyCount = new HashMap<>();
         emailCount = 0;
         allTimes = new ArrayList<>();
     }
+
+    /**
+     * Create a new interaction object from a number of interactions
+     * and a List of the times at which they occur
+     *
+     * @param interactions number of interactions
+     * @param times a list of interaction times
+     */
     public Interaction(int interactions, ArrayList<Integer> times){
         this();
         for(Integer time: times) {
@@ -69,7 +78,12 @@ public class Interaction {
         }
     }
 
-
+    /**
+     * Create a new interaction object with one interaction at a specific
+     * time.
+     *
+     * @param time the time of the interaction
+     */
     public Interaction(int time){
         this();
         frequencyCount.put(time, 1);
@@ -78,6 +92,15 @@ public class Interaction {
         allTimes.add(time);
     }
 
+    /**
+     * Create a new interaction object from another interaction object
+     * where all interactions in the resulting object occur between the
+     * lowerbound and upperbound time
+     *
+     * @param interaction the given interaction object
+     * @param lowerBound the lowerbound time
+     * @param upperBound the upperbound time
+     */
     public Interaction(Interaction interaction, int lowerBound, int upperBound){
         this();
         if (lowerBound < interaction.getMinTime()){
@@ -98,6 +121,11 @@ public class Interaction {
         }
     }
 
+    /**
+     * Add a single interaction to the object
+     *
+     * @param time the time of the interaction
+     */
     public void addInteraction(int time){
         if(frequencyCount.containsKey(time)) {
             int count = frequencyCount.get(time);
@@ -116,6 +144,15 @@ public class Interaction {
         allTimes.add(time);
     }
 
+    /**
+     * Determine the number of interactions that have occurred in
+     * a given time range, where the time range is:
+     * lowerBound <= t <= upperBound
+     *
+     * @param lowerBound the lower time bound
+     * @param upperBound the upper time bound
+     * @return the number of interactions
+     */
     public int timeRangeInteractions (int lowerBound, int upperBound){
         int sum = 0;
         for (TimeNode node: timeOrdered.subSet(new TimeNode(lowerBound), true, new TimeNode(upperBound), true)) {
@@ -124,14 +161,31 @@ public class Interaction {
         return sum;
     }
 
+    /**
+     * Determine the time of the first interaction in the object
+     *
+     * @return the time of the first interaction
+     */
     public int getMinTime(){
         return timeOrdered.first().getTime();
     }
 
+    /**
+     * Determine the time of the last interaction in the object
+     *
+     * @return the time of the last interaction
+     */
     public int getMaxTime() {
         return timeOrdered.last().getTime();
     }
 
+    /**
+     * Determine the time of the next interaction that occurs after
+     * a specific time
+     *
+     * @param initialTime the start time
+     * @return the time of the next interaction
+     */
     public int getNextTime(int initialTime){
         int count = 0;
         int nextTime = -1;
@@ -140,18 +194,27 @@ public class Interaction {
                 nextTime = time.getTime();
                 count++;
             }
-
             if (count > 0){
                 break;
             }
         }
-
         return nextTime;
     }
 
+    /**
+     * Obtain the total number of interactions
+     *
+     * @return the total number of interactions
+     */
     public int getInteractionCount() {
         return emailCount;
     }
+
+    /**
+     * Obtain a List containing the time of every interaction
+     *
+     * @return a List containing the time of every interaction
+     */
     public List<Integer> getTimes() {
         return new ArrayList<>(allTimes);
     }
