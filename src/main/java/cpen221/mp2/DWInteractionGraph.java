@@ -466,8 +466,115 @@ public class DWInteractionGraph {
      * @return the maximum number of users that can be polluted in N hours
      */
     public int MaxBreachedUserCount(int hours) {
-        // TODO: Implement this method
-        return 0;
+
+        Set<Integer> senders = new HashSet<>(interactionGraph.keySet());
+        int secondsPerMin = 60;
+        int minPerHour = 60;
+        int maxRange = hours*minPerHour*secondsPerMin;
+        TreeSet<Integer> maxInfections = new TreeSet<Integer>();
+
+        for(Integer sender: senders){
+            Set<Integer> receivers = new HashSet<Integer>(interactionGraph.get(sender).keySet());
+            Set<Integer> sendTimes = new HashSet<Integer>();
+            for(Integer receiver: receivers){
+                sendTimes.addAll(new HashSet<Integer>(interactionGraph.get(sender).get(receiver).getTimes()));
+
+            }
+
+            for(Integer time: sendTimes){
+                maxInfections.add(TimeBFS(sender, -1, maxRange, time));
+            }
+        }
+        return maxInfections.last();
     }
+
+    private int TimeBFS(int userID1, int userID2, int maxSeconds, int startTime) {
+        List<List<Integer>> path = new ArrayList<List<Integer>>();
+        List<List<Integer>> nextPaths = new ArrayList<List<Integer>>();
+        Set<Integer> adjacentUsers = new HashSet<>();
+        Set<Integer> visited = new HashSet<>();
+        List<Integer> lastUser;
+        int maxTime = startTime + maxSeconds;
+
+        List<Integer> startingNode = new ArrayList<Integer>();
+        startingNode.add(userID1);
+        startingNode.add(startTime);
+
+        nextPaths.add(startingNode);
+
+        while(nextPaths.size() > 0){
+
+            path.add(nextPaths.get(0));
+            nextPaths.remove(0);
+
+            lastUser = new ArrayList<Integer>(path.get(path.size()-1));
+            visited.add(lastUser.get(0));
+
+            if (lastUser.get(0) == userID2){
+                return visited.size();
+            }
+
+            if(interactionGraph.containsKey(lastUser.get(0))) {
+                adjacentUsers = interactionGraph.get(lastUser.get(0)).keySet();
+            }
+            if(!interactionGraph.containsKey(lastUser.get(0))) {
+                adjacentUsers = new HashSet<>();
+            }
+
+            List<List<Integer>> nextUsers = new ArrayList<List<Integer>>();
+
+            List pathElements = new ArrayList<Integer>();
+            List nextPathElements = new ArrayList<Integer>();
+
+            for(List<Integer> element: path){
+                pathElements.add(element.get(0));
+            }
+            for(List<Integer> element: nextPaths){
+                nextPathElements.add(element.get(0));
+            }
+
+            for(Integer user : adjacentUsers) {
+                if ((!pathElements.contains(user) && !nextPathElements.contains(user))) {
+                    int nextTime = interactionGraph.get(lastUser.get(0)).get(user).getNextTime(lastUser.get(1));
+                    if (nextTime >= 0 && nextTime <= maxTime) {
+                        ArrayList<Integer> node = new ArrayList<Integer>();
+                        node.add(user);
+                        node.add(nextTime);
+                        nextUsers.add(node);
+                    }
+                }
+                else if (pathElements.contains(user)){
+                    int index = pathElements.indexOf(user);
+                    int nextTime = interactionGraph.get(lastUser.get(0)).get(user).getNextTime(lastUser.get(1));
+                    if(nextTime < path.get(index).get(1)){
+                        ArrayList<Integer> node = new ArrayList<Integer>();
+                        node.add(user);
+                        node.add(nextTime);
+                        nextUsers.add(node);
+                        path.remove(index);
+                        pathElements.remove(index);
+                    }
+                }
+                else if (nextPathElements.contains(user)) {
+                    int index = nextPathElements.indexOf(user);
+                    int nextTime = interactionGraph.get(lastUser.get(0)).get(user).getNextTime(lastUser.get(1));
+                    if (nextTime < nextPaths.get(index).get(1)) {
+                        ArrayList<Integer> node = new ArrayList<Integer>();
+                        node.add(user);
+                        node.add(nextTime);
+                        nextUsers.add(node);
+                        nextPaths.remove(index);
+                        nextPathElements.remove(index);
+                    }
+                }
+                else{
+
+                }
+            }
+            nextPaths.addAll(nextUsers);
+        }
+        return visited.size();
+    }
+
 
 }

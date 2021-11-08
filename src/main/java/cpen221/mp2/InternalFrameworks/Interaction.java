@@ -115,6 +115,23 @@ public class Interaction {
         return timeOrdered.last().getTime();
     }
 
+    public int getNextTime(int initialTime){
+        int count = 0;
+        int nextTime = -1;
+        for(TimeNode time: timeOrdered){
+            if(time.getTime() >=  initialTime){
+                nextTime = time.getTime();
+                count++;
+            }
+
+            if (count > 0){
+                break;
+            }
+        }
+
+        return nextTime;
+    }
+
     public int getInteractionCount() {
         return emailCount;
     }
