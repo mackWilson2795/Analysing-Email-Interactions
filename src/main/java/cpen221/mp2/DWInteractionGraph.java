@@ -65,28 +65,23 @@ public class DWInteractionGraph {
                 if (count == 3) {
                     if (interactionGraph.get(sender) == null) {
                         interactionGraph.get(sender).put(receiver, new Interaction(number));
-                    }
-                    else if (!interactionGraph.get(sender).containsKey(receiver)) {
+                    } else if (!interactionGraph.get(sender).containsKey(receiver)) {
                         interactionGraph.get(sender).put(receiver, new Interaction(number));
-                    }
-                    else {
+                    } else {
                         interactionGraph.get(sender).get(receiver).addInteraction(number);
                     }
 
                     if (interactionGraphReceiver.get(receiver) == null) {
                         interactionGraphReceiver.get(receiver).put(sender, new Interaction(number));
-                    }
-                    else if (!interactionGraphReceiver.get(receiver).containsKey(sender)) {
+                    } else if (!interactionGraphReceiver.get(receiver).containsKey(sender)) {
                         interactionGraphReceiver.get(receiver).put(sender, new Interaction(number));
-                    }
-                    else {
+                    } else {
                         interactionGraphReceiver.get(receiver).get(sender).addInteraction(number);
                     }
                     count = 0;
                 }
             }
-        }
-        catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             //TODO: catch shouldn't be empty - but this will be removed when we integrate the email function
         }
     }
@@ -95,7 +90,7 @@ public class DWInteractionGraph {
      * Creates a new DWInteractionGraph from a DWInteractionGraph object
      * and considering a time window filter.
      *
-     * @param inputDWIG a DWInteractionGraph object
+     * @param inputDWIG  a DWInteractionGraph object
      * @param timeFilter an integer array of length 2: [t0, t1]
      *                   where t0 <= t1. The created DWInteractionGraph
      *                   should only include those emails in the input
@@ -107,67 +102,17 @@ public class DWInteractionGraph {
         Set<Integer> users = inputDWIG.getUserIDs();
         userIDs = inputDWIG.getUserIDs();
 
-        for(Integer sender : users) {
-            for (Integer receiver : users) {
-                if (inputDWIG.isSender(sender)) {
-                    if (inputDWIG.isInteractive(sender, receiver)) {
-                        Interaction temp = inputDWIG.getUserInteraction(sender, receiver);
-                        List<Integer> times = temp.getTimes();
-                        Interaction nextInteraction = new Interaction();
+        timeFilterGraph(inputDWIG, timeFilter, users);
 
-                        int count = 0;
-                        for (Integer time : times) {
-                            if (time >= timeFilter[0] && time <= timeFilter[1]) {
-                                nextInteraction.addInteraction(time);
-                                count++;
-                            }
-                        }
-                        if (interactionGraph == null){
-                            interactionGraph = new Hashtable<>();
-                        }
-                        if(count > 0){
-                            interactionGraph.put(sender, new Hashtable<>());
-                            interactionGraph.get(sender).put(receiver, nextInteraction);
-                        }
-                    }
-                }
-            }
-        }
+        timeFilterReceiverGraph(inputDWIG, timeFilter, users);
 
-        for(Integer receive1:users){
-            for(Integer send1:users){
-                if(inputDWIG.isReceiver(receive1)){
-                    if(inputDWIG.isInteractiveReceiver(receive1,send1)){
-                        Interaction temp = inputDWIG.getUserInteractionReceiver(receive1,send1);
-                        List<Integer> times = temp.getTimes();
-                        Interaction placeHolder = new Interaction();
-
-                        int count = 0;
-
-                        for(Integer time: times){
-                            if(time >= timeFilter[0] && time <= timeFilter[1]){
-                                placeHolder.addInteraction(time);
-                                count++;
-                            }
-                        }
-                        if(interactionGraphReceiver == null){
-                            interactionGraphReceiver = new Hashtable<>();
-                        }
-                        if(count > 0) {
-                            interactionGraphReceiver.put(receive1, new Hashtable<>());
-                            interactionGraphReceiver.get(receive1).put(send1, placeHolder);
-                        }
-                    }
-                }
-            }
-        }
-        for(Integer sender:users) { //needs to be revised
-            if (interactionGraph.get(sender) == null){
+        for (Integer sender : users) {
+            if (interactionGraph.get(sender) == null) {
                 userIDs.remove(sender);
             }
         }
         HashSet<Integer> temporary = new HashSet<>();
-        for(Integer sender:userIDs) {
+        for (Integer sender : userIDs) {
             Set<Integer> Temp = interactionGraph.get(sender).keySet();
             temporary.addAll(Temp);
         }
@@ -178,7 +123,7 @@ public class DWInteractionGraph {
      * Creates a new DWInteractionGraph from a DWInteractionGraph object
      * and considering a list of User IDs.
      *
-     * @param inputDWIG a DWInteractionGraph object
+     * @param inputDWIG  a DWInteractionGraph object
      * @param userFilter a List of User IDs. The created DWInteractionGraph
      *                   should exclude those emails in the input
      *                   DWInteractionGraph for which neither the sender
@@ -190,61 +135,18 @@ public class DWInteractionGraph {
         userIDs = inputDWIG.getUserIDs();
         Set<Integer> filterUsers = new HashSet<>(userFilter);
 
-        for(Integer sender :users) {
-            for (Integer receiver : users) {
-                if (inputDWIG.isSender(sender)) {
-                    if (inputDWIG.isInteractive(sender, receiver)) {
-                        if(filterUsers.contains(sender)||filterUsers.contains(receiver)) {
-                            Interaction temp = inputDWIG.getUserInteraction(sender, receiver);
-                            List<Integer> times = temp.getTimes();
-                            Interaction placeHolder = new Interaction();
-                            for(Integer time: times){
-                                placeHolder.addInteraction(time);
-                            }
-                            if (interactionGraph == null) {
-                                interactionGraph = new Hashtable<>();
-                            }
-                            interactionGraph.put(sender, new Hashtable<>());
-                            interactionGraph.get(sender).put(receiver, placeHolder);
-                        }
-                    }
-                }
-            }
-        }
+        filterUserGraph(inputDWIG, users, userFilter);
+        filterUserGraphReceiver(inputDWIG, filterUsers, users);
 
-        for(Integer receive1:users){
-            for(Integer send1:users){
-                if(inputDWIG.isReceiver(receive1)){
-                    if(inputDWIG.isInteractiveReceiver(receive1,send1)){
-                        if(userFilter.contains(send1)||userFilter.contains(receive1)) {
-                            Interaction temp = inputDWIG.getUserInteractionReceiver(receive1, send1);
-                            List<Integer> times = temp.getTimes();
-                            Interaction placeHolder = new Interaction();
 
-                            for(Integer time: times){
-                                placeHolder.addInteraction(time);
-                            }
-
-                            if (interactionGraphReceiver == null) {
-                                interactionGraphReceiver =
-                                        new Hashtable<>();
-                            }
-                            interactionGraphReceiver.put(receive1, new Hashtable<>());
-                            interactionGraphReceiver.get(receive1).put(send1, placeHolder);
-                        }
-                    }
-                }
-            }
-        }
-
-        for(Integer sender:users) {
+        for (Integer sender : users) {
             if (interactionGraph.get(sender) == null) {
                 userIDs.remove(sender);
             }
         }
 
         HashSet<Integer> temporary = new HashSet<>();
-        for(Integer sender : userIDs) {
+        for (Integer sender : userIDs) {
             Set<Integer> Temp = interactionGraph.get(sender).keySet();
             temporary.addAll(Temp);
         }
@@ -252,17 +154,23 @@ public class DWInteractionGraph {
         userIDs.addAll(temporary);
     }
 
-    public Interaction getUserInteraction(int sender, int receiver){
+
+
+    public Interaction getUserInteraction(int sender, int receiver) {
         int interactions = interactionGraph.get(sender).get(receiver).getInteractionCount();
-        ArrayList<Integer> copy = new ArrayList<>(interactionGraph.get(sender).get(receiver).getTimes());
-        return new Interaction(interactions,copy);
+        ArrayList<Integer> copy =
+            new ArrayList<>(interactionGraph.get(sender).get(receiver).getTimes());
+        return new Interaction(interactions, copy);
     }
 
-    public Interaction getUserInteractionReceiver(int receiver, int sender){
+
+
+
+    public Interaction getUserInteractionReceiver(int receiver, int sender) {
         int interactions = interactionGraphReceiver.get(receiver).get(sender).getInteractionCount();
         ArrayList<Integer> copy = new ArrayList<>(interactionGraphReceiver.get(receiver)
-                                      .get(sender).getTimes());
-        return new Interaction(interactions,copy);
+            .get(sender).getTimes());
+        return new Interaction(interactions, copy);
     }
 
     /**
@@ -270,22 +178,22 @@ public class DWInteractionGraph {
      *
      * @param sender the user
      * @return true if the user has sent an email
-     *         false otherwise
+     * false otherwise
      */
-    public Boolean isSender(int sender){
+    public Boolean isSender(int sender) {
         return interactionGraph.containsKey(sender);
     }
 
     /**
      * Determines if the sender has emailed the receiver
      *
-     * @param sender the sender of the email
+     * @param sender   the sender of the email
      * @param receiver the receiver of the email
      * @return true if an email has been sent from sender to receiver
-     *         false otherwise
+     * false otherwise
      */
-    public Boolean isInteractive(int sender, int receiver){
-        if(interactionGraph.containsKey(sender)){
+    public Boolean isInteractive(int sender, int receiver) {
+        if (interactionGraph.containsKey(sender)) {
             return interactionGraph.get(sender).containsKey(receiver);
         }
         return false;
@@ -296,9 +204,9 @@ public class DWInteractionGraph {
      *
      * @param receiver the user
      * @return true if the user has received an email
-     *         false otherwise
+     * false otherwise
      */
-    public Boolean isReceiver(int receiver){
+    public Boolean isReceiver(int receiver) {
         return interactionGraphReceiver.containsKey(receiver);
     }
 
@@ -306,12 +214,12 @@ public class DWInteractionGraph {
      * Determines if a user has received an email from a specific user
      *
      * @param receiver the receiver of the email
-     * @param sender the sender of the email
+     * @param sender   the sender of the email
      * @return true if the sender has emailed the receiver
-     *         false otherwise
+     * false otherwise
      */
-    public Boolean isInteractiveReceiver(int receiver, int sender){
-        if(interactionGraphReceiver.containsKey(receiver)){
+    public Boolean isInteractiveReceiver(int receiver, int sender) {
+        if (interactionGraphReceiver.containsKey(receiver)) {
             return interactionGraphReceiver.get(receiver).containsKey(sender);
         }
         return false;
@@ -326,6 +234,123 @@ public class DWInteractionGraph {
         copy.addAll(userIDs);
         return copy;
     }
+
+    private void timeFilterGraph(DWInteractionGraph inputDWIG, int[] timeFilter,
+                                 Set<Integer> users) {
+
+        for (Integer sender : users) {
+            for (Integer receiver : users) {
+                if (inputDWIG.isSender(sender)) {
+                    if (inputDWIG.isInteractive(sender, receiver)) {
+                        Interaction temp = inputDWIG.getUserInteraction(sender, receiver);
+                        List<Integer> times = temp.getTimes();
+                        Interaction nextInteraction = new Interaction();
+
+                        int count = 0;
+                        for (Integer time : times) {
+                            if (time >= timeFilter[0] && time <= timeFilter[1]) {
+                                nextInteraction.addInteraction(time);
+                                count++;
+                            }
+                        }
+                        if (interactionGraph == null) {
+                            interactionGraph = new Hashtable<>();
+                        }
+                        if (count > 0) {
+                            interactionGraph.put(sender, new Hashtable<>());
+                            interactionGraph.get(sender).put(receiver, nextInteraction);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void timeFilterReceiverGraph(DWInteractionGraph inputDWIG, int[] timeFilter, Set<Integer> users) {
+        for (Integer receive1 : users) {
+            for (Integer send1 : users) {
+                if (inputDWIG.isReceiver(receive1)) {
+                    if (inputDWIG.isInteractiveReceiver(receive1, send1)) {
+                        Interaction temp = inputDWIG.getUserInteractionReceiver(receive1, send1);
+                        List<Integer> times = temp.getTimes();
+                        Interaction placeHolder = new Interaction();
+
+                        int count = 0;
+
+                        for (Integer time : times) {
+                            if (time >= timeFilter[0] && time <= timeFilter[1]) {
+                                placeHolder.addInteraction(time);
+                                count++;
+                            }
+                        }
+                        if (interactionGraphReceiver == null) {
+                            interactionGraphReceiver = new Hashtable<>();
+                        }
+                        if (count > 0) {
+                            interactionGraphReceiver.put(receive1, new Hashtable<>());
+                            interactionGraphReceiver.get(receive1).put(send1, placeHolder);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    private void filterUserGraph(DWInteractionGraph inputDWIG, Set<Integer> users, List<Integer> filterUsers) {
+        for (Integer sender : users) {
+            for (Integer receiver : users) {
+                if (inputDWIG.isSender(sender)) {
+                    if (inputDWIG.isInteractive(sender, receiver)) {
+                        if (filterUsers.contains(sender) || filterUsers.contains(receiver)) {
+                            Interaction temp = inputDWIG.getUserInteraction(sender, receiver);
+                            List<Integer> times = temp.getTimes();
+                            Interaction placeHolder = new Interaction();
+                            for (Integer time : times) {
+                                placeHolder.addInteraction(time);
+                            }
+                            if (interactionGraph == null) {
+                                interactionGraph = new Hashtable<>();
+                            }
+                            interactionGraph.put(sender, new Hashtable<>());
+                            interactionGraph.get(sender).put(receiver, placeHolder);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void filterUserGraphReceiver(DWInteractionGraph inputDWIG, Set<Integer> userFilter, Set<Integer> users) {
+
+
+        for (Integer receive1 : users) {
+            for (Integer send1 : users) {
+                if (inputDWIG.isReceiver(receive1)) {
+                    if (inputDWIG.isInteractiveReceiver(receive1, send1)) {
+                        if (userFilter.contains(send1) || userFilter.contains(receive1)) {
+                            Interaction temp =
+                                inputDWIG.getUserInteractionReceiver(receive1, send1);
+                            List<Integer> times = temp.getTimes();
+                            Interaction placeHolder = new Interaction();
+
+                            for (Integer time : times) {
+                                placeHolder.addInteraction(time);
+                            }
+
+                            if (interactionGraphReceiver == null) {
+                                interactionGraphReceiver =
+                                    new Hashtable<>();
+                            }
+                            interactionGraphReceiver.put(receive1, new Hashtable<>());
+                            interactionGraphReceiver.get(receive1).put(send1, placeHolder);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     /**
      * @param sender the User ID of the sender in the email transaction.
