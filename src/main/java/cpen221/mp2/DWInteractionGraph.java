@@ -125,75 +125,75 @@ public class DWInteractionGraph {
             userMap = UserBuildingHelpers.createUserMapDW(interactionGraph);
             NthMostActiveSender = UserBuildingHelpers.createUsersSortedByActivityDW(userMap,SendOrReceive.SEND);
             NthMostActiveReceiver = UserBuildingHelpers.createUsersSortedByActivityDW(userMap,SendOrReceive.RECEIVE);
-        }
+    }
 
 
-        public Interaction getUserInteraction ( int sender, int receiver){
-            int interactions = interactionGraph.get(sender).get(receiver).getInteractionCount();
-            ArrayList<Integer> copy =
-                new ArrayList<>(interactionGraph.get(sender).get(receiver).getTimes());
-            return new Interaction(interactions, copy);
-        }
+    public Interaction getUserInteraction ( int sender, int receiver){
+        int interactions = interactionGraph.get(sender).get(receiver).getInteractionCount();
+        ArrayList<Integer> copy =
+            new ArrayList<>(interactionGraph.get(sender).get(receiver).getTimes());
+        return new Interaction(interactions, copy);
+    }
 
-        public Interaction getUserInteractionReceiver ( int receiver, int sender){
-            int interactions =
-                interactionGraphReceiver.get(receiver).get(sender).getInteractionCount();
-            ArrayList<Integer> copy =
-                new ArrayList<>(interactionGraphReceiver.get(receiver).get(sender).getTimes());
-            return new Interaction(interactions, copy);
-        }
+    public Interaction getUserInteractionReceiver ( int receiver, int sender){
+        int interactions =
+            interactionGraphReceiver.get(receiver).get(sender).getInteractionCount();
+        ArrayList<Integer> copy =
+            new ArrayList<>(interactionGraphReceiver.get(receiver).get(sender).getTimes());
+        return new Interaction(interactions, copy);
+    }
 
-        /**
-         * Determines if the user has sent an email
-         *
-         * @param sender the user
-         * @return true if the user has sent an email
-         * false otherwise
-         */
-        public Boolean isSender ( int sender){
-            return interactionGraph.containsKey(sender);
-        }
+    /**
+     * Determines if the user has sent an email
+     *
+     * @param sender the user
+     * @return true if the user has sent an email
+     * false otherwise
+     */
+    public Boolean isSender ( int sender){
+        return interactionGraph.containsKey(sender);
+    }
 
-        /**
-         * Determines if the sender has emailed the receiver
-         *
-         * @param sender   the sender of the email
-         * @param receiver the receiver of the email
-         * @return true if an email has been sent from sender to receiver
-         * false otherwise
-         */
-        public Boolean isInteractive ( int sender, int receiver){
-            if (interactionGraph.containsKey(sender)) {
-                return interactionGraph.get(sender).containsKey(receiver);
-            }
-            return false;
+    /**
+     * Determines if the sender has emailed the receiver
+     *
+     * @param sender   the sender of the email
+     * @param receiver the receiver of the email
+     * @return true if an email has been sent from sender to receiver
+     * false otherwise
+     */
+    public Boolean isInteractive ( int sender, int receiver){
+        if (interactionGraph.containsKey(sender)) {
+            return interactionGraph.get(sender).containsKey(receiver);
         }
+        return false;
+    }
 
-        /**
-         * Determines if a user has received an email
-         *
-         * @param receiver the user
-         * @return true if the user has received an email
-         * false otherwise
-         */
-        public Boolean isReceiver ( int receiver){
-            return interactionGraphReceiver.containsKey(receiver);
-        }
+    /**
+     * Determines if a user has received an email
+     *
+     * @param receiver the user
+     * @return true if the user has received an email
+     * false otherwise
+     */
+    public Boolean isReceiver ( int receiver){
+        return interactionGraphReceiver.containsKey(receiver);
+    }
 
-        /**
-         * Determines if a user has received an email from a specific user
-         *
-         * @param receiver the receiver of the email
-         * @param sender   the sender of the email
-         * @return true if the sender has emailed the receiver
-         * false otherwise
-         */
-        public Boolean isInteractiveReceiver ( int receiver, int sender){
-            if (interactionGraphReceiver.containsKey(receiver)) {
-                return interactionGraphReceiver.get(receiver).containsKey(sender);
-            }
-            return false;
+    /**
+     * Determines if a user has received an email from a specific user
+     *
+     * @param receiver the receiver of the email
+     * @param sender   the sender of the email
+     * @return true if the sender has emailed the receiver
+     * false otherwise
+     */
+    public Boolean isInteractiveReceiver ( int receiver, int sender){
+        if (interactionGraphReceiver.containsKey(receiver)) {
+            return interactionGraphReceiver.get(receiver).containsKey(sender);
         }
+        return false;
+    }
 
     /**
      * @return a Set of Integers, where every element in the set is a User ID
@@ -203,28 +203,28 @@ public class DWInteractionGraph {
         return new HashSet<>(userIDs);
     }
 
-        private void storeEmailInteraction(int sender, int receiver, int time){
+    private void storeEmailInteraction(int sender, int receiver, int time){
 
-            userIDs.add(sender);
-            userIDs.add(receiver);
+        userIDs.add(sender);
+        userIDs.add(receiver);
 
-            if (!interactionGraph.containsKey(sender)) {
-                interactionGraph.put(sender, new Hashtable<>());
-            }
-            if (!interactionGraphReceiver.containsKey(receiver)) {
-                interactionGraphReceiver.put(receiver, new Hashtable<>());
-            }
-            if (!interactionGraph.get(sender).containsKey(receiver)) {
-                interactionGraph.get(sender).put(receiver, new Interaction(time));
-            } else {
-                interactionGraph.get(sender).get(receiver).addInteraction(time);
-            }
-            if (!interactionGraphReceiver.get(receiver).containsKey(sender)) {
-                interactionGraphReceiver.get(receiver).put(sender, new Interaction(time));
-            } else {
-                interactionGraphReceiver.get(receiver).get(sender).addInteraction(time);
-            }
+        if (!interactionGraph.containsKey(sender)) {
+            interactionGraph.put(sender, new Hashtable<>());
         }
+        if (!interactionGraphReceiver.containsKey(receiver)) {
+            interactionGraphReceiver.put(receiver, new Hashtable<>());
+        }
+        if (!interactionGraph.get(sender).containsKey(receiver)) {
+            interactionGraph.get(sender).put(receiver, new Interaction(time));
+        } else {
+            interactionGraph.get(sender).get(receiver).addInteraction(time);
+        }
+        if (!interactionGraphReceiver.get(receiver).containsKey(sender)) {
+            interactionGraphReceiver.get(receiver).put(sender, new Interaction(time));
+        } else {
+            interactionGraphReceiver.get(receiver).get(sender).addInteraction(time);
+        }
+    }
 
     private void timeFilterGraph(DWInteractionGraph inputDWIG, int[] timeFilter,
                                  Set<Integer> users) {
