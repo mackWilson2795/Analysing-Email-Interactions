@@ -69,6 +69,14 @@ public class Interaction {
         frequencyCount.putAll(interaction.frequencyCount);
         timeOrdered.addAll(interaction.timeOrdered);
     }
+
+    /**
+     * Create a new interaction object from 2 given interaction objects.
+     * The new object contains the exact data found in both given interaction
+     * objects.
+     * @param interaction1 First given interaction object
+     * @param interaction2 Second given interaction object
+     */
     public Interaction(Interaction interaction1, Interaction interaction2){
         this(interaction1);
         for (TimeNode node : interaction2.timeOrdered) {
