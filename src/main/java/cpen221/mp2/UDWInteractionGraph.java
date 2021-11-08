@@ -3,6 +3,9 @@ package cpen221.mp2;
 import cpen221.mp2.Users.UndirectedUser;
 import java.util.*;
 
+import cpen221.mp2.Users.UserBuildingHelpers;
+//todo: ENUM comparator for jaden, hashmap user integration in UDW and DW finish UDW
+
 public class UDWInteractionGraph {
 
     private Hashtable<Integer, Hashtable<Integer, Interaction>> graph;
@@ -37,19 +40,11 @@ public class UDWInteractionGraph {
         for (Email email:emailDataRaw) {
             addEmail(email);
         }
-        // TODO: initialize user map and list
+        users = UserBuildingHelpers.createUserMapUDW(graph);
     }
 
     private void addEmail(Email email){
         int user1 = email.getSender(), user2 = email.getReceiver(), time = email.getTimeStamp();
-
-        UndirectedUser person1 = new UndirectedUser(user1);
-        UndirectedUser person2 = new UndirectedUser(user2);
-        // TODO: user stuff
-        /*
-        person1.interactWithUser(user2);
-        person2.interactWithUser(user1);
-         */
         addInteractionTime(user1, user2, time);
         addInteractionTime(user2, user1, time);
     }
@@ -100,10 +95,7 @@ public class UDWInteractionGraph {
 
 
                     // TODO: init user list + map
-                    /*
-                    users.add(new UndirectedUser(user1));
-                    users.add(new UndirectedUser(user2));
-                     */
+
                 }
             }
         }
@@ -134,22 +126,24 @@ public class UDWInteractionGraph {
      */
     public UDWInteractionGraph(UDWInteractionGraph inputUDWIG, List<Integer> userFilter) {
         graph = (Hashtable<Integer, Hashtable<Integer, Interaction>>) inputUDWIG.graph.clone();
-        users = (HashMap<Integer, UndirectedUser>) inputUDWIG.users.clone();
-        for (Integer sender : graph.keySet()) {
-            if(userFilter.contains(sender)){
-                graph.remove(sender);
+        HashSet<Integer> filterSet = new HashSet<>(userFilter);
+        HashSet<Integer> usersInFinalMap = new HashSet<>();
+        for (Integer userID: filterSet) {
+            usersInFinalMap.addAll(inputUDWIG.users.get(userID).getSetOfInteractedUsers());
+        }
+        for (Integer user :inputUDWIG.graph.keySet()) {
+             if(!(usersInFinalMap.contains(user))){
+             graph.remove(user);
             }
-            for (Integer receiver: graph.get(sender).keySet()) {
-                if(userFilter.contains(receiver)){
-                    graph.remove(receiver);
+        }
+        for (Integer user : graph.keySet()) {
+            for (Integer userInteractedWith : graph.get(user).keySet()) {
+                if(!(usersInFinalMap.contains(userInteractedWith))){
+                    graph.get(user).remove(userInteractedWith);
                 }
             }
         }
-        for (Integer userID : userFilter) {
-            // TODO: fix this to work with userMap
-            UndirectedUser user = new UndirectedUser(userID);
-            users.remove(user);
-        }
+        //TODO: here run the map creator
     }
 
     /**
