@@ -1,6 +1,5 @@
 package cpen221.mp2;
 
-import cpen221.mp2.Users.AbstractUser;
 import cpen221.mp2.Users.UndirectedUser;
 import cpen221.mp2.Users.User;
 
@@ -94,5 +93,9 @@ public class SearchAlgorithms {
         DFS(user1, new UndirectedUser(-1), mapOfAllUsers);
 
         return new HashSet<>(seen);
+    }
+
+    public static List<Integer> directedDFS (User user1, User user2, Map<Integer, User> mapOfAllUsers){
+        return DFS(user1, user2, mapOfAllUsers);
     }
 }
