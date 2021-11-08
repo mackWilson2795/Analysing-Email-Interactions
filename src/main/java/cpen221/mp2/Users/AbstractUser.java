@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class AbstractUser implements User {
-    protected Set<Integer> uniqueUsersInteractedWith;
+    protected Set<Integer> setOfAdjacentUsers;
     protected int userID;
 
     // TODO: rep invars or abs functs?
@@ -16,7 +16,7 @@ public abstract class AbstractUser implements User {
      */
      public AbstractUser(int id){
          userID = id;
-         uniqueUsersInteractedWith = new HashSet<>();
+         setOfAdjacentUsers = new HashSet<>();
      }
 
     /**
@@ -34,8 +34,8 @@ public abstract class AbstractUser implements User {
      * @return a Set of user ID numbers corresponding to all others the user has
      *         interacted with
      */
-    public HashSet<Integer> getSetOfInteractedUsers() {
-        return new HashSet<>(uniqueUsersInteractedWith);
+    public HashSet<Integer> getSetOfAdjacentUsers() {
+        return new HashSet<>(setOfAdjacentUsers);
     }
 
     //TODO: do i write specs for these two??

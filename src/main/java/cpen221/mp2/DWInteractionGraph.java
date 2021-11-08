@@ -1,5 +1,8 @@
 package cpen221.mp2;
 
+import cpen221.mp2.InternalFrameworks.Email;
+import cpen221.mp2.InternalFrameworks.Interaction;
+import cpen221.mp2.InternalFrameworks.ReadingMethods;
 import cpen221.mp2.Users.DirectedUser;
 
 import java.io.FileNotFoundException;
@@ -31,7 +34,6 @@ public class DWInteractionGraph {
      *                 directory containing email interactions
      */
     public DWInteractionGraph(String fileName) {
-
         userIDs = new HashSet<>();
         interactionGraph = new Hashtable<>();
         interactionGraphReceiver = new Hashtable<>();
@@ -183,15 +185,14 @@ public class DWInteractionGraph {
             return false;
         }
 
-        /**
-         * @return a Set of Integers, where every element in the set is a User ID
-         * in this DWInteractionGraph.
-         */
-        public Set<Integer> getUserIDs () {
-            Set<Integer> copy = new HashSet<>();
-            copy.addAll(userIDs);
-            return copy;
-        }
+        
+    /**
+     * @return a Set of Integers, where every element in the set is a User ID
+     * in this DWInteractionGraph.
+     */
+    public Set<Integer> getUserIDs() {
+        return new HashSet<>(userIDs);
+    }
 
         private void storeEmailInteraction(int sender, int receiver, int time){
 
@@ -281,21 +282,19 @@ public class DWInteractionGraph {
     private void filterUserGraph(DWInteractionGraph inputDWIG, Set<Integer> users, List<Integer> filterUsers) {
         for (Integer sender : users) {
             for (Integer receiver : users) {
-                if (inputDWIG.isSender(sender)) {
-                    if (inputDWIG.isInteractive(sender, receiver)) {
-                        if (filterUsers.contains(sender) || filterUsers.contains(receiver)) {
-                            Interaction temp = inputDWIG.getUserInteraction(sender, receiver);
-                            List<Integer> times = temp.getTimes();
-                            Interaction placeHolder = new Interaction();
-                            for (Integer time : times) {
-                                placeHolder.addInteraction(time);
-                            }
-                            if (interactionGraph == null) {
-                                interactionGraph = new Hashtable<>();
-                            }
-                            interactionGraph.put(sender, new Hashtable<>());
-                            interactionGraph.get(sender).put(receiver, placeHolder);
+                if (inputDWIG.isSender(sender) && inputDWIG.isInteractive(sender, receiver)) {
+                    if (filterUsers.contains(sender) || filterUsers.contains(receiver)) {
+                        Interaction temp = inputDWIG.getUserInteraction(sender, receiver);
+                        List<Integer> times = temp.getTimes();
+                        Interaction placeHolder = new Interaction();
+                        for (Integer time : times) {
+                            placeHolder.addInteraction(time);
                         }
+                        if (interactionGraph == null) {
+                            interactionGraph = new Hashtable<>();
+                        }
+                        interactionGraph.put(sender, new Hashtable<>());
+                        interactionGraph.get(sender).put(receiver, placeHolder);
                     }
                 }
             }
@@ -376,7 +375,7 @@ public class DWInteractionGraph {
      */
     public int[] ReportOnUser(int userID) {
         DirectedUser user = userMap.get(userID);
-        return new int[] {user.getSent(), user.getReceived(), user.getSetOfInteractedUsers().size()};
+        return new int[] {user.getSent(), user.getReceived(), user.getSetOfAdjacentUsers().size()};
     }
 
     /**
@@ -394,8 +393,6 @@ public class DWInteractionGraph {
             return NthMostActiveReceiver.get(N + 1);
         }
     }
-
-    /* ------- Task 3 ------- */
 
     /**
      * performs breadth first search on the DWInteractionGraph object

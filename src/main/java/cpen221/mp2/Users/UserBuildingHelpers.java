@@ -1,6 +1,6 @@
 package cpen221.mp2.Users;
 
-import cpen221.mp2.Interaction;
+import cpen221.mp2.InternalFrameworks.Interaction;
 
 import java.util.*;
 
@@ -12,8 +12,9 @@ public class UserBuildingHelpers {
 
 
 //TODO: getsent/ getrecieved replace with get interactions that takes in enum
-    public static HashMap<Integer, UndirectedUser>
-    createUserMapUDW (Hashtable<Integer, Hashtable<Integer, Interaction>> graph){
+    public static HashMap<Integer, UndirectedUser> createUserMapUDW
+
+    (Hashtable<Integer, Hashtable<Integer, Interaction>> graph){
         HashMap<Integer, UndirectedUser> userMap = new HashMap<>();
 
         for (Integer user1 : graph.keySet()) {
@@ -22,10 +23,10 @@ public class UserBuildingHelpers {
                 userMap.get(user1).interactWithUser(user2, graph.get(user1).get(user2).getInteractionCount());
             }
         }
-        return  userMap;
+        return userMap;
     }
 
-    public static void createUsersSortedByActivity() {
+    public static void createUDUsersSortedByActivity() {
         // TODO: double check logic here - im tired
         List<User> userList = new ArrayList<>();
         for (Integer user : users.keySet()) {

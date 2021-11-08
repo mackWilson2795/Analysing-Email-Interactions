@@ -1,13 +1,10 @@
-package cpen221.mp2;
-
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Comparator;
+package cpen221.mp2.InternalFrameworks;
 
 public class TimeNode implements Comparable<TimeNode> {
     private final int time;
     private  int numEmails;
     //TODO : Review safety of adding/ how we will work with this;
+    // TODO: specs
     public TimeNode (int time1, int emails){
         time = time1;
         numEmails = emails;
@@ -37,8 +34,4 @@ public class TimeNode implements Comparable<TimeNode> {
         TimeNode node = (TimeNode) other;
         return (this.getTime() == node.getTime());
     }
-   /* @Override
-    public int hashCode(TimeNode node){
-        return node.getTime();
-    }*/
 }

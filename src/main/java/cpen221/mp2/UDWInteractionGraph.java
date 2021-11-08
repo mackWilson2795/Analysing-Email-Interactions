@@ -1,8 +1,12 @@
 package cpen221.mp2;
 
+import cpen221.mp2.InternalFrameworks.Email;
+import cpen221.mp2.InternalFrameworks.Interaction;
+import cpen221.mp2.InternalFrameworks.ReadingMethods;
 import cpen221.mp2.Users.UndirectedUser;
 import java.util.*;
 
+import cpen221.mp2.Users.User;
 import cpen221.mp2.Users.UserBuildingHelpers;
 //todo: ENUM comparator for jaden, hashmap user integration in UDW and DW finish UDW
 //TODO: worries with using clone in user filter constructor;
@@ -20,6 +24,7 @@ public class UDWInteractionGraph {
                    is in graph.keySet()
                    For every userID in graph.keySet(), there exists
                    a User in users whose ID is userID
+                   // TODO: involve user map in rep invar
                    TODO: user1, user2 is the same as user2, user1
      */
 
@@ -128,7 +133,7 @@ public class UDWInteractionGraph {
         HashSet<Integer> filterSet = new HashSet<>(userFilter);
         HashSet<Integer> usersInFinalMap = new HashSet<>();
         for (Integer userID: filterSet) {
-            usersInFinalMap.addAll(inputUDWIG.users.get(userID).getSetOfInteractedUsers());
+            usersInFinalMap.addAll(inputUDWIG.users.get(userID).getSetOfAdjacentUsers());
         }
         for (Integer user :inputUDWIG.graph.keySet()) {
              if(!(usersInFinalMap.contains(user))){
@@ -176,8 +181,7 @@ public class UDWInteractionGraph {
         if(!(users.keySet().contains(user1) && users.keySet().contains(user2))){
             return 0;
         }
-        int count = graph.get(user1).get(user2).getInteractionCount();
-        return count;
+        return graph.get(user1).get(user2).getInteractionCount();
     }
 
     /* ------- Task 2 ------- */
@@ -191,11 +195,11 @@ public class UDWInteractionGraph {
     public int[] ReportActivityInTimeWindow(int[] timeWindow) {
        UDWInteractionGraph filtered = new UDWInteractionGraph(this, timeWindow);
        int[] activity = new int[2];
-       activity[1] = filtered.users.keySet().size();
+       activity[0] = filtered.users.keySet().size();
        int sum = filtered.users.values().stream()
                .map(UndirectedUser::getTotalInteractions)
                .mapToInt(numInteractions -> numInteractions).sum();
-       activity[2] = sum/2;
+       activity[1] = sum/2;
         return activity;
     }
 
@@ -209,8 +213,13 @@ public class UDWInteractionGraph {
      */
     public int[] ReportOnUser(int userID) {
         int[] report = new int[2];
-        report[1] = users.get(userID).getTotalInteractions();
-        report[2] = users.get(userID).getSetOfInteractedUsers().size();
+        if(!(users.keySet().contains(userID))){
+            report[0]=0;
+            report[1]=0;
+        } else {
+            report[0] = users.get(userID).getTotalInteractions();
+            report[1] = users.get(userID).getSetOfAdjacentUsers().size();
+        }
         return report;
     }
 
@@ -240,11 +249,6 @@ public class UDWInteractionGraph {
      * @return whether a path exists between the two users
      */
     public boolean PathExists(int userID1, int userID2) {
-        // TODO: Implement this
-        /*
-        SearchAlgorithms.pathExists(users.get(userID1), users.get(userID2), )
-         */
-        return false;
+        return SearchAlgorithms.pathExists(users.get(userID1), users.get(userID2), new HashMap<>(users));
     }
-
 }

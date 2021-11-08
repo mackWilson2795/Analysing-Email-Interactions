@@ -1,10 +1,8 @@
 package cpen221.mp2.Users;
 
-import cpen221.mp2.SendOrReceive;
-
 import java.util.HashSet;
 
-public class DirectedUser extends AbstractUser {
+public class DirectedUser extends AbstractUser implements User {
     private int sent = 0;
     private int received = 0;
     private HashSet<Integer> uniqueUsersSentTo;
@@ -32,7 +30,7 @@ public class DirectedUser extends AbstractUser {
         super(user.userID);
         sent = user.sent;
         received = user.received;
-        uniqueUsersInteractedWith = new HashSet<>(user.uniqueUsersInteractedWith);
+        setOfAdjacentUsers = new HashSet<>(user.setOfAdjacentUsers);
         uniqueUsersSentTo = new HashSet<>(user.uniqueUsersSentTo);
         uniqueUsersReceivedFrom = new HashSet<>(user.uniqueUsersReceivedFrom);
     }
@@ -49,7 +47,7 @@ public class DirectedUser extends AbstractUser {
      *                  requires: numEmails is non-negative //TODO: might be able to remove this requires
      */
     public void sendEmail (int receiver, int numEmails){
-        super.uniqueUsersInteractedWith.add(receiver);
+        super.setOfAdjacentUsers.add(receiver);
         uniqueUsersSentTo.add(receiver);
         sent += numEmails;
     }
@@ -63,7 +61,6 @@ public class DirectedUser extends AbstractUser {
      *                  requires: numEmails is non-negative
      */
     public void receiveEmail (int sender, int numEmails){
-        super.uniqueUsersInteractedWith.add(sender);
         uniqueUsersReceivedFrom.add(sender);
         received += numEmails;
     }
