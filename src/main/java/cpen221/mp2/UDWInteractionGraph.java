@@ -5,6 +5,8 @@ import java.util.*;
 
 import cpen221.mp2.Users.UserBuildingHelpers;
 //todo: ENUM comparator for jaden, hashmap user integration in UDW and DW finish UDW
+//TODO: worries with using clone in user filter constructor;
+//todo: check when initializing users and graph don't be redundant, just new HashMap<>()
 
 public class UDWInteractionGraph {
 
@@ -32,7 +34,7 @@ public class UDWInteractionGraph {
      * @param fileName the name of the file in the resources
      *                 directory containing email interactions
      */
-    //TODO: how do I put the reference for one object in both things
+
     public UDWInteractionGraph(String fileName) {
         users = new HashMap<>();
         graph = new Hashtable<>();
@@ -77,7 +79,6 @@ public class UDWInteractionGraph {
      *                   UDWInteractionGraph with send time t in the
      *                   t0 <= t <= t1 range.
      */
-    //Todo: seen maybe?
     public UDWInteractionGraph(UDWInteractionGraph inputUDWIG, int[] timeFilter) {
         int lowerBound = timeFilter[0], upperbound = timeFilter[1];
         graph = new Hashtable<>();
@@ -92,13 +93,10 @@ public class UDWInteractionGraph {
                             new Interaction(unfilteredInteraction, lowerBound, upperbound);
                     addInteraction(user1, user2, filteredInteraction);
                     addInteraction(user2, user1, filteredInteraction);
-
-
-                    // TODO: init user list + map
-
                 }
             }
         }
+        users = UserBuildingHelpers.createUserMapUDW(graph);
     }
 
     private void addInteraction(Integer user1, Integer user2, Interaction interaction){
@@ -143,7 +141,7 @@ public class UDWInteractionGraph {
                 }
             }
         }
-        //TODO: here run the map creator
+        users = UserBuildingHelpers.createUserMapUDW(graph);
     }
 
     /**
@@ -174,8 +172,8 @@ public class UDWInteractionGraph {
      * @return the number of email interactions (send/receive) between user1 and user2
      */
     public int getEmailCount(int user1, int user2) {
-        // TODO: Implement this getter method
-        return 0;
+        int count = graph.get(user1).get(user2).getInteractionCount();
+        return count;
     }
 
     /* ------- Task 2 ------- */

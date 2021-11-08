@@ -29,13 +29,21 @@ public class Task1UDWTests {
     public void testGetUserIds1() {
         Assertions.assertEquals(new HashSet<>(Arrays.asList(1, 2, 3)), testGraph2.getUserIDs());
     }
+    @Test
+    public void testGetUserIds2() {
+        Assertions.assertEquals(new HashSet<>(Arrays.asList(0,1, 2, 3)), testGraph1.getUserIDs());
+    }
 
     @Test
     public void testGetEmailCount() {
         Assertions.assertEquals(2, testGraphBase.getEmailCount(1, 0));
         Assertions.assertEquals(2, testGraphBase.getEmailCount(0, 1));
     }
-
+    @Test
+    public void testGetEmailCount3() {
+        Assertions.assertEquals(2, testGraphBase.getEmailCount(1, 0));
+        Assertions.assertEquals(2, testGraphBase.getEmailCount(0, 3));
+    }
     @Test
     public void testGetEmailCount1() {
         Assertions.assertEquals(2, testGraph1.getEmailCount(1, 0));
