@@ -125,7 +125,10 @@ public class UDWInteractionGraph {
      * @param inputDWIG a DWInteractionGraph object
      */
     public UDWInteractionGraph(DWInteractionGraph inputDWIG) {
-        // TODO: Implement this constructor
+        HashSet<Integer> userList = new HashSet<>();
+        userList = inputDWIG.getUserIDs();
+
+
     }
 
     /**
