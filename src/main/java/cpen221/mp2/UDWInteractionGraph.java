@@ -8,11 +8,7 @@ import java.util.*;
 
 import cpen221.mp2.Users.User;
 import cpen221.mp2.Users.UserBuildingHelpers;
-//todo: ENUM comparator for jaden, hashmap user integration in UDW and DW finish UDW
-//TODO: worries with using clone in user filter constructor;
-//todo: check when initializing users and graph don't be redundant, just new HashMap<>()
-//todo: check edges i.e. when users arent even in the graph
-//todo: check for all methods that It works when users only email themselves
+
 
 public class UDWInteractionGraph {
 
@@ -25,8 +21,8 @@ public class UDWInteractionGraph {
                    is in graph.keySet()
                    For every userID in graph.keySet(), there exists
                    a User in users whose ID is userID
-                   // TODO: involve user map in rep invar
-                   // TODO: user1, user2 is the same as user2, user1
+                   For every interaction graph.get(user1).get(user2)
+                   the same interaction exists under graph.get(user2).get(user1)
      */
     public boolean checkRep(){
         HashSet<Integer> userIDs = new HashSet<>(users.keySet());
@@ -103,13 +99,14 @@ public class UDWInteractionGraph {
                 usersInFinalMap.addAll(inputUDWIG.users.get(userID).getSetOfAdjacentUsers());
             }
         }
-        for (Integer user :inputUDWIG.graph.keySet()) {
+        for (Integer user : inputUDWIG.graph.keySet()) {
              if(!(usersInFinalMap.contains(user))){
              graph.remove(user);
             }
         }
-        for (Integer user : graph.keySet()) {
-            for (Integer userInteractedWith : graph.get(user).keySet()) {
+        Hashtable<Integer, Hashtable<Integer, Interaction>> nextGraphForIter = new Hashtable<>(graph);
+        for (Integer user : nextGraphForIter.keySet()) {
+            for (Integer userInteractedWith : nextGraphForIter.get(user).keySet()) {
                 if(!(usersInFinalMap.contains(userInteractedWith))){
                     graph.get(user).remove(userInteractedWith);
                 }
@@ -290,7 +287,7 @@ public class UDWInteractionGraph {
      * @return the User ID for the Nth most active user
      */
     public int NthMostActiveUser(int N) {
-        if (N > NthMostActiveUser.size()){
+        if (N >= NthMostActiveUser.size()){
             return -1;
         }
         return NthMostActiveUser.get(N-1);

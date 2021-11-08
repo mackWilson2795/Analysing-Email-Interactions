@@ -8,8 +8,6 @@ import java.util.Arrays;
 
 public class UDLargeDataTests {
 
-    // TODO: tests on large data here
-
     private static UDWInteractionGraph udwbig1;
     private static UDWInteractionGraph udwbig2;
     private static UDWInteractionGraph udwbig3;
@@ -25,8 +23,8 @@ public class UDLargeDataTests {
 
     @Test
     public void constructorTests() {
-        UDWInteractionGraph udwRemake = new UDWInteractionGraph(udwbig1, Arrays.asList(0, 45506334));
-        Assertions.assertEquals(udwRemake.getEmailCount(26, 4), udwbig1.getEmailCount(26, 4));
+        UDWInteractionGraph udwRemake = new UDWInteractionGraph(udwbig1, new int[]{0, 45506334});
+        Assertions.assertEquals(65, udwbig1.getEmailCount(26, 4));
         Assertions.assertEquals(udwRemake.NumberOfComponents(), udwbig1.NumberOfComponents());
     }
 
