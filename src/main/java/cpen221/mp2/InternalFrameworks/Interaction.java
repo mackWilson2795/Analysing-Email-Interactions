@@ -60,6 +60,23 @@ public class Interaction {
             this.addInteraction(time);
         }
     }
+    public Interaction(Interaction interaction){
+        timeOrdered = new TreeSet<>();
+        frequencyCount = new HashMap<>();
+        allTimes = new ArrayList<>();
+        allTimes.addAll(interaction.allTimes);
+        emailCount = interaction.emailCount;
+        frequencyCount.putAll(interaction.frequencyCount);
+        timeOrdered.addAll(interaction.timeOrdered);
+    }
+    public Interaction(Interaction interaction1, Interaction interaction2){
+        this(interaction1);
+        for (TimeNode node : interaction2.timeOrdered) {
+            for (int i = 0; i < node.getNumEmails(); i++) {
+                this.addInteraction(node.getTime());
+            }
+        }
+    }
 
     /**
      * Create a new interaction object with one interaction at a specific
