@@ -58,7 +58,7 @@ public class DWInteractionGraph {
                 if (count == 2) {
                     receiver = number;
                     userIDs.add(receiver);
-                   if (!interactionGraphReceiver.containsKey(receiver)) {
+                    if (!interactionGraphReceiver.containsKey(receiver)) {
                         interactionGraphReceiver.put(receiver, new Hashtable<Integer, Interaction>());
                     }
                 }
@@ -128,9 +128,9 @@ public class DWInteractionGraph {
                         if(interactionGraph == null){
                             interactionGraph = new Hashtable<Integer, Hashtable<Integer, Interaction>>();
                         }
-                       if(count > 0){
-                        interactionGraph.put(sender, new Hashtable<Integer, Interaction>());
-                        interactionGraph.get(sender).put(receiver, placeHolder);
+                        if(count > 0){
+                            interactionGraph.put(sender, new Hashtable<Integer, Interaction>());
+                            interactionGraph.get(sender).put(receiver, placeHolder);
                         }
                     }
                 }
@@ -157,7 +157,7 @@ public class DWInteractionGraph {
                         if(interactionGraphReceiver == null){
                             interactionGraphReceiver = new Hashtable<Integer, Hashtable<Integer, Interaction>>();
                         }
-                       if(count > 0) {
+                        if(count > 0) {
                             interactionGraphReceiver.put(receive1, new Hashtable<Integer, Interaction>());
                             interactionGraphReceiver.get(receive1).put(send1, placeHolder);
                         }
@@ -168,7 +168,7 @@ public class DWInteractionGraph {
 
         for(Integer sender:users) { //needs to be revised
             if (interactionGraph.get(sender) == null){
-                    userIDs.remove(sender);
+                userIDs.remove(sender);
             }
         }
         HashSet<Integer> temporary = new HashSet<Integer>();
@@ -266,7 +266,7 @@ public class DWInteractionGraph {
                             Interaction placeHolder = new Interaction();
 
                             for(Integer time: times){
-                                    placeHolder.addInteraction(time);
+                                placeHolder.addInteraction(time);
                             }
 
                             if (interactionGraph == null) {
