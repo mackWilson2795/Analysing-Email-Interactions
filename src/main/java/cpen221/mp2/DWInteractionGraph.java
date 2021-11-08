@@ -31,7 +31,6 @@ public class DWInteractionGraph {
      *                 directory containing email interactions
      */
     public DWInteractionGraph(String fileName) {
-
         userIDs = new HashSet<>();
         interactionGraph = new Hashtable<>();
         interactionGraphReceiver = new Hashtable<>();
