@@ -199,7 +199,7 @@ public class DWInteractionGraph {
      * @return a Set of Integers, where every element in the set is a User ID
      * in this DWInteractionGraph.
      */
-    public Set<Integer> getUserIDs() {
+    public HashSet<Integer> getUserIDs() {
         return new HashSet<>(userIDs);
     }
 
