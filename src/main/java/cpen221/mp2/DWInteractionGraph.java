@@ -46,7 +46,6 @@ public class DWInteractionGraph {
         }
     }
 
-
         /**
          * Creates a new DWInteractionGraph from a DWInteractionGraph object
          * and considering a time window filter.
@@ -99,21 +98,18 @@ public class DWInteractionGraph {
             filterUserGraph(inputDWIG, users, userFilter);
             filterUserGraphReceiver(inputDWIG, filterUsers, users);
 
-
-            for (Integer sender : users) {
-                if (interactionGraph.get(sender) == null) {
-                    userIDs.remove(sender);
-                }
+        for (Integer sender : users) {
+            if (interactionGraph.get(sender) == null) {
+                userIDs.remove(sender);
             }
-
-            HashSet<Integer> temporary = new HashSet<>();
-            for (Integer sender : userIDs) {
-                Set<Integer> Temp = interactionGraph.get(sender).keySet();
-                temporary.addAll(Temp);
-            }
-
-            userIDs.addAll(temporary);
         }
+        HashSet<Integer> temporary = new HashSet<>();
+        for (Integer sender : userIDs) {
+            Set<Integer> Temp = interactionGraph.get(sender).keySet();
+            temporary.addAll(Temp);
+        }
+        userIDs.addAll(temporary);
+    }
 
 
         public Interaction getUserInteraction ( int sender, int receiver){
@@ -183,7 +179,6 @@ public class DWInteractionGraph {
             return false;
         }
 
-        
     /**
      * @return a Set of Integers, where every element in the set is a User ID
      * in this DWInteractionGraph.
@@ -217,7 +212,6 @@ public class DWInteractionGraph {
 
     private void timeFilterGraph(DWInteractionGraph inputDWIG, int[] timeFilter,
                                  Set<Integer> users) {
-
         for (Integer sender : users) {
             for (Integer receiver : users) {
                 if (inputDWIG.isSender(sender)) {
@@ -300,8 +294,6 @@ public class DWInteractionGraph {
     }
 
     private void filterUserGraphReceiver(DWInteractionGraph inputDWIG, Set<Integer> userFilter, Set<Integer> users) {
-
-
         for (Integer receive1 : users) {
             for (Integer send1 : users) {
                 if (inputDWIG.isReceiver(receive1)) {
@@ -385,10 +377,12 @@ public class DWInteractionGraph {
      * tie, secondarily sorts the tied User IDs in ascending order.
      */
     public int NthMostActiveUser(int N, SendOrReceive interactionType) {
+        // TODO: MAKE THIS WORK
+
         if (interactionType == SendOrReceive.SEND){
-            return NthMostActiveSender.get(N + 1);
+            return NthMostActiveSender.get(N - 1);
         } else {
-            return NthMostActiveReceiver.get(N + 1);
+            return NthMostActiveReceiver.get(N - 1);
         }
     }
 

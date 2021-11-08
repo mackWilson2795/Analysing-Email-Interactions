@@ -42,6 +42,7 @@ public class Task3UDWTests {
         Assertions.assertFalse(t.PathExists(2, 3));
     }
 
+    // TODO: Laura theres a bug in the UDW constructors - were getting some nulls/test fails from this
     @Test
     public void testSingleUser() {
         UDWInteractionGraph t = new UDWInteractionGraph("resources/Task3-components-test2.txt");
