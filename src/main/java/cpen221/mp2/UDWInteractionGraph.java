@@ -271,7 +271,8 @@ public class UDWInteractionGraph {
     /**
      * @param userID1 the user ID for the first user
      * @param userID2 the user ID for the second user
-     * @return whether a path exists between the two users
+     * @return true if a path exists between the users
+     *         false otherwise
      */
     public boolean PathExists(int userID1, int userID2) {
         return SearchAlgorithms.pathExists(users.get(userID1), users.get(userID2), new HashMap<>(users));
