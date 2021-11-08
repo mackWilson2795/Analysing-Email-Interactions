@@ -4,7 +4,7 @@ import cpen221.mp2.Interaction;
 
 import java.util.*;
 
-public class TEMP_UserBuildingHelpers {
+public class UserBuildingHelpers {
 //TODO: remo
     private static Hashtable<Integer, Hashtable<Integer, Interaction>> graph;
     private static HashMap<Integer, UndirectedUser> users;
@@ -25,7 +25,7 @@ public class TEMP_UserBuildingHelpers {
         return  userMap;
     }
 
-    public static void createUsersSortedByActivity(HashMap) {
+    public static void createUsersSortedByActivity() {
         // TODO: double check logic here - im tired
         List<User> userList = new ArrayList<>();
         for (Integer user : users.keySet()) {
