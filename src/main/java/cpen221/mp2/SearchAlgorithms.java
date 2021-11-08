@@ -87,6 +87,9 @@ public class SearchAlgorithms {
      *         false otherwise
      */
     public static boolean pathExists (User user1, User user2, Map<Integer, User> mapOfAllUsers){
+        if (user1 == null || user2 == null){
+            return false;
+        }
         if (mapOfAllUsers.keySet().isEmpty() || !mapOfAllUsers.containsKey(user1.getUserID())
                                              || !mapOfAllUsers.containsKey(user2.getUserID())){
             return false;

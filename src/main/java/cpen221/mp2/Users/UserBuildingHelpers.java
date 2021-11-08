@@ -106,8 +106,13 @@ public class UserBuildingHelpers {
             userList.sort(new sentSortDW());
         }
         ArrayList<Integer> userIDsSortedByActivity = new ArrayList<>();
-        for (User user : userList) {
-            userIDsSortedByActivity.add(user.getUserID());
+        for (DirectedUser user : userList) {
+            if (interactionType == SendOrReceive.SEND && user.getSent() != 0){
+                userIDsSortedByActivity.add(user.getUserID());
+            }
+            if (interactionType == SendOrReceive.RECEIVE && user.getReceived() != 0){
+                userIDsSortedByActivity.add(user.getUserID());
+            }
         }
         return userIDsSortedByActivity;
     }

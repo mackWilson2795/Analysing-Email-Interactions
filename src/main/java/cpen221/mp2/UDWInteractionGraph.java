@@ -103,13 +103,14 @@ public class UDWInteractionGraph {
                 usersInFinalMap.addAll(inputUDWIG.users.get(userID).getSetOfAdjacentUsers());
             }
         }
-        for (Integer user :inputUDWIG.graph.keySet()) {
+        for (Integer user : inputUDWIG.graph.keySet()) {
              if(!(usersInFinalMap.contains(user))){
              graph.remove(user);
             }
         }
-        for (Integer user : graph.keySet()) {
-            for (Integer userInteractedWith : graph.get(user).keySet()) {
+        Hashtable<Integer, Hashtable<Integer, Interaction>> nextGraphForIter = new Hashtable<>(graph);
+        for (Integer user : nextGraphForIter.keySet()) {
+            for (Integer userInteractedWith : nextGraphForIter.get(user).keySet()) {
                 if(!(usersInFinalMap.contains(userInteractedWith))){
                     graph.get(user).remove(userInteractedWith);
                 }
@@ -290,7 +291,7 @@ public class UDWInteractionGraph {
      * @return the User ID for the Nth most active user
      */
     public int NthMostActiveUser(int N) {
-        if (N > NthMostActiveUser.size()){
+        if (N >= NthMostActiveUser.size()){
             return -1;
         }
         return NthMostActiveUser.get(N-1);

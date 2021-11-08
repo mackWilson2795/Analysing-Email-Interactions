@@ -11,11 +11,11 @@ import java.util.StringTokenizer;
 public class ReadingMethods {
 
     /**
+     * Create an ArrayList of Emails from a file.
+     * File must be accessible in local directory
      *
-     *
-     *
+     * @param fileName the name of the file in the directory
      */
-    // TODO: make spec
     public static ArrayList<Email> readerFunction(String fileName) {
         ArrayList<Email> emailList = new ArrayList<>();
         try {
@@ -27,7 +27,6 @@ public class ReadingMethods {
                 String nextEmail = reader.nextToken();
                 emailList.add(new Email(nextEmail));
             }
-            // TODO: decide throw vs. catch of the InvalidEmailException
         } catch (IOException | InvalidEmailException ioe){
             ioe.printStackTrace();
             if (ioe instanceof IOException){

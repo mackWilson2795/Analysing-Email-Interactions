@@ -60,6 +60,7 @@ public class Interaction {
             this.addInteraction(time);
         }
     }
+    // TODO: specs
     public Interaction(Interaction interaction){
         timeOrdered = new TreeSet<>();
         frequencyCount = new HashMap<>();
