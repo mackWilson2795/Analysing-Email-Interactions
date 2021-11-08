@@ -5,13 +5,31 @@ public class TimeNode implements Comparable<TimeNode> {
     private  int numEmails;
     //TODO : Review safety of adding/ how we will work with this;
     // TODO: specs
+
+    /* Abstraction Function:
+        numEmails = the number of emails sent
+        time = the exact time //TODO: laura
+     */
+
+    /**
+     * Create a new TimeNode at a specific time with a given
+     * number of initial emails
+     *
+     * @param time1 the time
+     * @param emails the number of emails
+     */
     public TimeNode (int time1, int emails){
         time = time1;
         numEmails = emails;
     }
+
+    /**
+     * Create a new TimeNode object at a specific time
+     * @param time1 //TODO: laura
+     */
     public TimeNode(int time1){
         time = time1;
-        numEmails = 0; // does this break the rep invariant?
+        numEmails = 0;
     }
     public void add(){
         numEmails ++;

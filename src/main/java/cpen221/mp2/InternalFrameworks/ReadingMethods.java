@@ -10,9 +10,9 @@ import java.util.StringTokenizer;
 
 public class ReadingMethods {
 
-    /** Reader function
-     * Give it an input file (.txt)
-     * creates a list of emails (sender, receiver, timestamp)
+    /**
+     *
+     *
      *
      */
     // TODO: make spec
