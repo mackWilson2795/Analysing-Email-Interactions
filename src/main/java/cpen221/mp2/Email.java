@@ -12,7 +12,7 @@ public class Email {
     private int receiver;
     private int timeStamp;
 
-    /* Rep invariant
+    /*  Rep invariant
             sender, receiver, and timeStamp should never be non-null.
      */
 
@@ -46,19 +46,13 @@ public class Email {
             int[] emailNumbers = new int[3];
             for (int i = 0; i < 3; i++){
                 emailNumbers[i] = scanner.nextInt();
-                // Comment for the reviewer - we are using this try catch block to ensure that the given line of text
-                //     has at least three entries in it (to satisfy sender, receiver, timeStamp) we catch the
-                //     NoSuchElementException and then throw an InvalidEmailException. Is this an ok practice or should
-                //     we rethink our strategy here. We are trying to protect against invalid data being read as emails
             }
             sender = emailNumbers[0];
             receiver = emailNumbers[1];
             timeStamp = emailNumbers[2];
         } catch (NoSuchElementException e){
-            //TODO: probably remove printout
-            System.out.println("Detected line with less than three entries" +
-                    " ensure input data is formatted properly");
-            throw new InvalidEmailException();
+            throw new InvalidEmailException("Detected line with less than three entries" +
+                    " ensure input data is formatted properly", e);
         }
     }
 
