@@ -370,14 +370,14 @@ public class DWInteractionGraph {
         int senders = 0;
         int receivers = 0;
         int numTransactions = 0;
-        for (Integer userID : userMap.keySet()){
-            if (userMap.get(userID).getSent() > 0){
+        for (Integer userID : timedSubGraph.userMap.keySet()){
+            if (timedSubGraph.userMap.get(userID).getSent() > 0){
                 senders++;
+                numTransactions += timedSubGraph.userMap.get(userID).getSent();
             }
-            if (userMap.get(userID).getReceived() > 0){
+            if (timedSubGraph.userMap.get(userID).getReceived() > 0){
                 receivers++;
             }
-            numTransactions += userMap.get(userID).getTotalInteractions();
         }
         return new int[] {senders, receivers, numTransactions};
     }
