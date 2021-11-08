@@ -9,15 +9,15 @@ import cpen221.mp2.Users.UserComparators.sortUDW;
 import java.util.*;
 
 public class UserBuildingHelpers {
-//TODO: removal
-    private static Hashtable<Integer, Hashtable<Integer, Interaction>> graph;
-    private static HashMap<Integer, UndirectedUser> users;
-    private static ArrayList<Integer> usersSortedByActivity;
 
-
-    // TODO: getsent/ getrecieved replace with get interactions that takes in enum
-    public static HashMap<Integer, UndirectedUser> createUserMapUDW (Hashtable<Integer, Hashtable<Integer
-            , Interaction>> graph){
+    /**
+     * Produces a map of userIDs -> UndirectedUsers given a UDW graph
+     *
+     * @param graph an undirected graph of interactions
+     * @return a map of userIDs -> UndirectedUsers
+     */
+    public static HashMap<Integer, UndirectedUser> createUserMapUDW (Hashtable<Integer,
+                                               Hashtable<Integer, Interaction>> graph){
         HashMap<Integer, UndirectedUser> userMap = new HashMap<>();
 
         for (Integer user1 : graph.keySet()) {
@@ -28,8 +28,15 @@ public class UserBuildingHelpers {
         }
         return userMap;
     }
-    public static HashMap<Integer, DirectedUser> createUserMapDW
-            (Hashtable<Integer, Hashtable<Integer, Interaction>> senderGraph) {
+
+    /**
+     * Produces a map of userIDs -> DirectedUsers from a DW graph
+     *
+     * @param senderGraph a directed graph of interactions
+     * @return a map of userIDs -> DirectedUsers
+     */
+    public static HashMap<Integer, DirectedUser> createUserMapDW (Hashtable<Integer,
+                                     Hashtable<Integer, Interaction>> senderGraph) {
         HashMap<Integer, DirectedUser> userMap = new HashMap<>();
         for (Integer sender: senderGraph.keySet()) {
             if(!(userMap.containsKey(sender))){
@@ -47,6 +54,18 @@ public class UserBuildingHelpers {
         return userMap;
     }
 
+    /**
+     * Produces a list of userIDs sorted by the activity of the users.
+     * Where activity represents the total number of emails sent and
+     * received.
+     * The users in the resulting list are sorted in ascending order
+     * based on activity, in cases where two users have the same
+     * number of total interactions the user with the lower userID
+     * will be at the lower index.
+     *
+     * @param users a map of userIDs -> UndirectedUsers
+     * @return a sorted ArrayList of userIDs
+     */
     public static ArrayList<Integer> createUsersSortedByActivityUDW(HashMap<Integer, UndirectedUser> users) {
         List<User> userList = new ArrayList<>();
         for (Integer user : users.keySet()) {
@@ -61,6 +80,19 @@ public class UserBuildingHelpers {
         return userIDsSortedByActivity;
     }
 
+    /**
+     * Produces a list of userIDs sorted by the activity of the users.
+     * Where activity represents either the total number of emails sent
+     * or received, determined by the given {@code interactionType}.
+     * The users in the resulting list are sorted in ascending order
+     * based on activity, in cases where two users have the same
+     * number of sent/received emails the user with the lower userID
+     * will be at the lower index.
+     *
+     * @param users a map of userIDs -> DirectedUsers
+     * @param interactionType the direction of interaction to sort by
+     * @return an ArrayList of userIDs sorted by interactionType
+     */
     public static ArrayList<Integer> createUsersSortedByActivityDW(HashMap<Integer, DirectedUser> users,
                                                                    SendOrReceive interactionType) {
         List<DirectedUser> userList = new ArrayList<>();

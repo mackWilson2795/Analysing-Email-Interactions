@@ -14,8 +14,7 @@ public class SearchAlgorithms {
     /**
      * Performs a depth first search on a Map of user ids -> users
      * when a user has interacted with many other users, will search
-     * in the direction of the lowest user ID first
-     * // TODO: there is some technical information in this spec - is this ok?
+     * in the direction of the lowest user ID first.
      *
      * @param startUser the user to begin searching from
      * @param endUser the user to search to
@@ -43,9 +42,13 @@ public class SearchAlgorithms {
         }
     }
 
+    /**
+     * Helper function to run the DFS search
+     *
+     * @param startUser the user to start this branch of the search from
+     * @param endUser the target user
+     */
     private static void recursiveDFSHelper(User startUser, User endUser){
-        // todo: remove
-        //      Set<AbstractUser> adjacentUsers = new HashSet<>();
         seen.add(startUser.getUserID());
         searchOrder.add(startUser.getUserID());
 
@@ -54,7 +57,6 @@ public class SearchAlgorithms {
             return;
         }
 
-        // TODO: fix to work with directed
         List<Integer> adjacentUsers = new ArrayList<>();
         for (Integer i: startUser.getSetOfAdjacentUsers()) {
             if (!seen.contains(i)) {
@@ -73,6 +75,15 @@ public class SearchAlgorithms {
         }
     }
 
+    /**
+     * Determine if a path exists between two users given both users
+     * and a map containing all the users in their graph.
+     *
+     * @param user1
+     * @param user2
+     * @param mapOfAllUsers
+     * @return
+     */
     public static boolean pathExists (User user1, User user2, Map<Integer, User> mapOfAllUsers){
         if (mapOfAllUsers.keySet().isEmpty() || !mapOfAllUsers.containsKey(user1.getUserID())
                                              || !mapOfAllUsers.containsKey(user2.getUserID())){
