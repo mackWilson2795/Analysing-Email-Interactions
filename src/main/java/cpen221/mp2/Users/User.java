@@ -13,7 +13,7 @@ public interface User {
      */
     int getUserID();
 
-    /** TODO: this ok?
+    /**
      * @return the total number of emails this user has sent and received
      */
     int getTotalInteractions();

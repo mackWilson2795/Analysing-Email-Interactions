@@ -481,10 +481,10 @@ public class DWInteractionGraph {
      */
     public int NthMostActiveUser(int N, SendOrReceive interactionType) {
         // TODO: MAKE THIS WORK
-        if (interactionType == SendOrReceive.SEND && N < NthMostActiveSender.size()){
+        if (interactionType == SendOrReceive.SEND && N <= NthMostActiveSender.size()){
             return NthMostActiveSender.get(N - 1);
         } else if (interactionType == SendOrReceive.RECEIVE
-                                   && N < NthMostActiveReceiver.size()) {
+                                   && N <= NthMostActiveReceiver.size()) {
             return NthMostActiveReceiver.get(N - 1);
         } else {
             return -1;

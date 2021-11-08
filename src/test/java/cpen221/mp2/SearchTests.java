@@ -26,9 +26,8 @@ public class SearchTests {
 
     @Test
     public void searchPathImpossibles() {
-        Assertions.assertEquals(false, udbig1.PathExists(-1,1));
-        Assertions.assertEquals(false, udbig1.PathExists(1,-1));
-
+        Assertions.assertEquals(false, udbig1.PathExists(9999999,1));
+        Assertions.assertEquals(false, udbig1.PathExists(1,9999999));
     }
 
 }
