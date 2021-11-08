@@ -79,10 +79,12 @@ public class SearchAlgorithms {
      * Determine if a path exists between two users given both users
      * and a map containing all the users in their graph.
      *
-     * @param user1
-     * @param user2
-     * @param mapOfAllUsers
-     * @return
+     * @param user1 the user to start searching from
+     * @param user2 the user to search to
+     * @param mapOfAllUsers a map of userIDs -> Users which
+     *                     contains all users in the graph
+     * @return true if a path exists between user1 and user2
+     *         false otherwise
      */
     public static boolean pathExists (User user1, User user2, Map<Integer, User> mapOfAllUsers){
         if (mapOfAllUsers.keySet().isEmpty() || !mapOfAllUsers.containsKey(user1.getUserID())
@@ -95,14 +97,35 @@ public class SearchAlgorithms {
         return found;
     }
 
-    public static HashSet<Integer> findComponent (User user1, Map<Integer, User> mapOfAllUsers){
-        if (mapOfAllUsers.keySet().isEmpty() || !mapOfAllUsers.containsKey(user1.getUserID())){
-            return new HashSet<>(user1.getUserID());
+    /**
+     * Determine the full component that a User is a member of.
+     *
+     * @param user the user to find the component of
+     * @param mapOfAllUsers a map of userIDs -> Users which
+     *                      contains all users in the graph
+     * @return a HashSet containing all userIDs in the user's component
+     */
+    public static HashSet<Integer> findComponent (User user, Map<Integer, User> mapOfAllUsers){
+        if (mapOfAllUsers.keySet().isEmpty() || !mapOfAllUsers.containsKey(user.getUserID())){
+            return new HashSet<>(user.getUserID());
         }
-        DFS(user1, new UndirectedUser(-1), mapOfAllUsers);
+        DFS(user, new UndirectedUser(-1), mapOfAllUsers);
         return new HashSet<>(seen);
     }
 
+    /**
+     * Perform a depth first search on a Directed Interaction Graph
+     * given a user to start searching from and a user to search towards.
+     * When given an option of multiple users, the search will always favor
+     * searching towards the user with the lowest userID number first.
+     *
+     * @param user1 the user to begin searching from
+     * @param user2 the user to search for
+     * @param mapOfAllUsers a map of userIDs -> Users which
+     *                      contains all users in the graph
+     * @return a list of integers which corresponds to the order
+     *         the users in the map were visited during the search
+     */
     public static List<Integer> directedDFS (User user1, User user2, Map<Integer, User> mapOfAllUsers){
         return DFS(user1, user2, mapOfAllUsers);
     }
