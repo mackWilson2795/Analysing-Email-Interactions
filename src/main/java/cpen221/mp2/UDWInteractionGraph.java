@@ -191,11 +191,11 @@ public class UDWInteractionGraph {
     public int[] ReportActivityInTimeWindow(int[] timeWindow) {
        UDWInteractionGraph filtered = new UDWInteractionGraph(this, timeWindow);
        int[] activity = new int[2];
-       activity[1] = filtered.users.keySet().size();
+       activity[0] = filtered.users.keySet().size();
        int sum = filtered.users.values().stream()
                .map(UndirectedUser::getTotalInteractions)
                .mapToInt(numInteractions -> numInteractions).sum();
-       activity[2] = sum/2;
+       activity[1] = sum/2;
         return activity;
     }
 
@@ -209,8 +209,13 @@ public class UDWInteractionGraph {
      */
     public int[] ReportOnUser(int userID) {
         int[] report = new int[2];
-        report[1] = users.get(userID).getTotalInteractions();
-        report[2] = users.get(userID).getSetOfInteractedUsers().size();
+        if(!(users.keySet().contains(userID))){
+            report[0]=0;
+            report[1]=0;
+        } else {
+            report[0] = users.get(userID).getTotalInteractions();
+            report[1] = users.get(userID).getSetOfInteractedUsers().size();
+        }
         return report;
     }
 
