@@ -1,6 +1,7 @@
 package cpen221.mp2.Users;
 
 import cpen221.mp2.InternalFrameworks.Interaction;
+import cpen221.mp2.SendOrReceive;
 
 import java.util.*;
 
@@ -67,5 +68,23 @@ class sortByActivity implements Comparator<User> {
         } else {
             return Integer.compare(user1.getUserID(), user2.getUserID());
         }
+    }
+
+    public int compare(DirectedUser user1, DirectedUser user2, SendOrReceive direction){
+        if(direction == SendOrReceive.SEND){
+            if(user1.getSent() < user2.getSent()){
+                return 1;
+            } else if(user2.getSent() < user1.getSent()){
+                return -1;
+            }
+        }
+        if(direction == SendOrReceive.RECEIVE){
+            if(user1.getReceived() < user2.getReceived()){
+                return 1;
+            } else if(user2.getReceived() < user1.getReceived()){
+                return -1;
+            }
+        }
+        return Integer.compare(user1.getUserID(), user2.getUserID());
     }
 }

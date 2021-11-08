@@ -12,6 +12,7 @@ import cpen221.mp2.Users.UserBuildingHelpers;
 //TODO: worries with using clone in user filter constructor;
 //todo: check when initializing users and graph don't be redundant, just new HashMap<>()
 //todo: check edges i.e. when users arent even in the graph
+//todo: check for all methods that It works when users only email themselves
 
 public class UDWInteractionGraph {
 
