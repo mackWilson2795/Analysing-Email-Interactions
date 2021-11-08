@@ -7,23 +7,39 @@ public abstract class AbstractUser implements User {
     protected Set<Integer> uniqueUsersInteractedWith;
     protected int userID;
 
-    // constr
+    // TODO: rep invars or abs functs?
+
+    /**
+     * Default constructor for a user
+     *
+     * @param id the identification number associated with the user
+     */
      public AbstractUser(int id){
          userID = id;
          uniqueUsersInteractedWith = new HashSet<>();
      }
 
-    // getUserID
+    /**
+     * Obtain the user ID number of the user
+     *
+     * @return the user ID
+     */
     public int getUserID(){
          return userID;
     }
 
-    // setOfUsersInteractedWith
+    /**
+     * Obtain the set of all unique users that the given user has interacted with
+     *
+     * @return a Set of user ID numbers corresponding to all others the user has
+     *         interacted with
+     */
     public HashSet<Integer> getSetOfInteractedUsers() {
         return new HashSet<>(uniqueUsersInteractedWith);
     }
 
-    // Override equals and hashcode (hashcode == userID)
+    //TODO: do i write specs for these two??
+
     @Override
     public boolean equals(Object that){
          if (that instanceof AbstractUser){
