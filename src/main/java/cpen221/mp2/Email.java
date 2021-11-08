@@ -12,7 +12,9 @@ public class Email {
     private int receiver;
     private int timeStamp;
 
-    // TODO: Rep invariant (maybe just all three non null?)
+    /* Rep invariant
+            sender, receiver, and timeStamp should never be non-null.
+     */
 
     /*
         Abstraction function:
@@ -45,9 +47,9 @@ public class Email {
             for (int i = 0; i < 3; i++){
                 emailNumbers[i] = scanner.nextInt();
                 // Comment for the reviewer - we are using this try catch block to ensure that the given line of text
-                //      has at least three entries in it (to satisfy sender, receiver, timeStamp) we catch the
-                //      NoSuchElementException and then throw an InvalidEmailException. Is this an ok practice or should
-                //      we rethink our strategy here. We are trying to protect against invalid data being read as emails
+                //     has at least three entries in it (to satisfy sender, receiver, timeStamp) we catch the
+                //     NoSuchElementException and then throw an InvalidEmailException. Is this an ok practice or should
+                //     we rethink our strategy here. We are trying to protect against invalid data being read as emails
             }
             sender = emailNumbers[0];
             receiver = emailNumbers[1];
