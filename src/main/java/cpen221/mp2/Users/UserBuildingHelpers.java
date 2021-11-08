@@ -5,16 +5,15 @@ import cpen221.mp2.InternalFrameworks.Interaction;
 import java.util.*;
 
 public class UserBuildingHelpers {
-//TODO: remo
+//TODO: removal
     private static Hashtable<Integer, Hashtable<Integer, Interaction>> graph;
     private static HashMap<Integer, UndirectedUser> users;
     private static ArrayList<Integer> usersSortedByActivity;
 
 
-//TODO: getsent/ getrecieved replace with get interactions that takes in enum
-    public static HashMap<Integer, UndirectedUser> createUserMapUDW
-
-    (Hashtable<Integer, Hashtable<Integer, Interaction>> graph){
+    // TODO: getsent/ getrecieved replace with get interactions that takes in enum
+    public static HashMap<Integer, UndirectedUser> createUserMapUDW (Hashtable<Integer, Hashtable<Integer
+            , Interaction>> graph){
         HashMap<Integer, UndirectedUser> userMap = new HashMap<>();
 
         for (Integer user1 : graph.keySet()) {
@@ -26,41 +25,29 @@ public class UserBuildingHelpers {
         return userMap;
     }
 
-    public static void createUDUsersSortedByActivity() {
-        // TODO: double check logic here - im tired
+    public static ArrayList<Integer> createUsersSortedByActivityUDW(HashMap<Integer, UndirectedUser> users) {
         List<User> userList = new ArrayList<>();
         for (Integer user : users.keySet()) {
             userList.add(users.get(user));
         }
         userList.sort(new sortByActivity());
 
-        /* for (User user : userList) {
-            usersSortedByActivity.add(user.getUserID());
-        } */ // TODO: remove me
-        /* if (userList.size() > 0){
-            usersSortedByActivity.add(userList.get(1).getUserID());
-            int lastValue = userList.get(1).getTotalInteractions();
-            int lastUser = userList.get(1).getUserID();
-            for (int i = 1; i < userList.size(); i++) {
-                if (userList.get(i).getTotalInteractions() != lastValue) {
-                    usersSortedByActivity.add(userList.get(i).getUserID());
-                    lastValue = userList.get(i).getTotalInteractions();
-                } else {
-                    usersSortedByActivity.add(lastUser);
-                }
-            }
-        } */
+        ArrayList<Integer> userIDsSortedByActivity = new ArrayList<>();
+        for (User user : userList) {
+            userIDsSortedByActivity.add(user.getUserID());
+        }
+        return userIDsSortedByActivity;
     }
 }
 
 class sortByActivity implements Comparator<User> {
     public int compare(User user1, User user2){
         if (user1.getTotalInteractions() < user2.getTotalInteractions()){
-            return -1;
-        } else if (user2.getTotalInteractions() < user1.getTotalInteractions()) {
             return 1;
+        } else if (user2.getTotalInteractions() < user1.getTotalInteractions()) {
+            return -1;
         } else {
-            return Integer.compare(user2.getUserID(), user1.getUserID());
+            return Integer.compare(user1.getUserID(), user2.getUserID());
         }
     }
 }

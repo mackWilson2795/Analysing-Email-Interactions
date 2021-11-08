@@ -24,7 +24,6 @@ public class SearchAlgorithms {
      * @return a list of integers which corresponds to the order
      *         the users in the map were visited during the search
      */
-    // todo: this could take in ints as well - decide what is easiest
     private static List<Integer> DFS(User startUser, User endUser, Map<Integer, User> mapOfAllUsers){
 
         found = false;

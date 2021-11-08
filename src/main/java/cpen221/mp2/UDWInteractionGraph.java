@@ -17,15 +17,15 @@ public class UDWInteractionGraph {
 
     private Hashtable<Integer, Hashtable<Integer, Interaction>> graph;
     private HashMap<Integer, UndirectedUser> users;
-    /* ------- Task 1 ------- */
-    /* Building the Constructors */
+    private ArrayList<Integer> NthMostActiveUser;
+
     /*
     Rep Invariant: For every User in the set users, User.getUserID()
                    is in graph.keySet()
                    For every userID in graph.keySet(), there exists
                    a User in users whose ID is userID
                    // TODO: involve user map in rep invar
-                   TODO: user1, user2 is the same as user2, user1
+                   // TODO: user1, user2 is the same as user2, user1
      */
 
     public boolean checkRep(){
@@ -40,7 +40,6 @@ public class UDWInteractionGraph {
      * @param fileName the name of the file in the resources
      *                 directory containing email interactions
      */
-
     public UDWInteractionGraph(String fileName) {
         users = new HashMap<>();
         graph = new Hashtable<>();
@@ -49,29 +48,7 @@ public class UDWInteractionGraph {
             addEmail(email);
         }
         users = UserBuildingHelpers.createUserMapUDW(graph);
-    }
-
-    private void addEmail(Email email){
-        int user1 = email.getSender(), user2 = email.getReceiver(), time = email.getTimeStamp();
-        addInteractionTime(user1, user2, time);
-        addInteractionTime(user2, user1, time);
-    }
-
-    private void addInteractionTime(int user1, int user2, int time){
-        if (graph.containsKey(user1)){
-            Hashtable<Integer, Interaction> user1Table = graph.get(user1);
-            if (user1Table.containsKey(user2)){
-                user1Table.get(user2).addInteraction(time);
-            }
-            else {
-                user1Table.put(user2, new Interaction(time));
-            }
-        }
-        else {
-            Hashtable<Integer, Interaction> newUser1Table = new Hashtable<>();// do I need to make a new one?
-            newUser1Table.put(user2, new Interaction(time));
-            graph.put(user1, newUser1Table);
-        }
+        NthMostActiveUser = UserBuildingHelpers.createUsersSortedByActivityUDW(new HashMap<>(users));
     }
 
     /**
@@ -94,7 +71,8 @@ public class UDWInteractionGraph {
 
                 Interaction unfilteredInteraction = inputUDWIG.graph.get(user1).get(user2);
                 if(!(unfilteredInteraction.getMinTime() > upperbound ||
-                        unfilteredInteraction.getMaxTime() < lowerBound)) {
+                        unfilteredInteraction.getMaxTime() < lowerBound))
+                {
                     Interaction filteredInteraction =
                             new Interaction(unfilteredInteraction, lowerBound, upperbound);
                     addInteraction(user1, user2, filteredInteraction);
@@ -103,19 +81,7 @@ public class UDWInteractionGraph {
             }
         }
         users = UserBuildingHelpers.createUserMapUDW(graph);
-    }
-
-    private void addInteraction(Integer user1, Integer user2, Interaction interaction){
-        if(graph.containsKey(user1)){
-            if(!(graph.get(user1).containsKey(user2))){
-                graph.get(user1).put(user2, interaction);
-            }
-        }
-        else {
-            Hashtable<Integer, Interaction> user1Table = new Hashtable<>();
-            user1Table.put(user2,interaction);
-            graph.put(user1, user1Table);
-        }
+        NthMostActiveUser = UserBuildingHelpers.createUsersSortedByActivityUDW(new HashMap<>(users));
     }
 
     /**
@@ -148,6 +114,7 @@ public class UDWInteractionGraph {
             }
         }
         users = UserBuildingHelpers.createUserMapUDW(graph);
+        NthMostActiveUser = UserBuildingHelpers.createUsersSortedByActivityUDW(new HashMap<>(users));
     }
 
     /**
@@ -157,6 +124,43 @@ public class UDWInteractionGraph {
      */
     public UDWInteractionGraph(DWInteractionGraph inputDWIG) {
         // TODO: Implement this constructor
+    }
+
+
+    private void addEmail(Email email){
+        int user1 = email.getSender(), user2 = email.getReceiver(), time = email.getTimeStamp();
+        addInteractionTime(user1, user2, time);
+        addInteractionTime(user2, user1, time);
+    }
+
+    private void addInteractionTime(int user1, int user2, int time){
+        if (graph.containsKey(user1)){
+            Hashtable<Integer, Interaction> user1Table = graph.get(user1);
+            if (user1Table.containsKey(user2)){
+                user1Table.get(user2).addInteraction(time);
+            }
+            else {
+                user1Table.put(user2, new Interaction(time));
+            }
+        }
+        else {
+            Hashtable<Integer, Interaction> newUser1Table = new Hashtable<>(); // TODO:
+            newUser1Table.put(user2, new Interaction(time));
+            graph.put(user1, newUser1Table);
+        }
+    }
+
+    private void addInteraction(Integer user1, Integer user2, Interaction interaction){
+        if(graph.containsKey(user1)){
+            if(!(graph.get(user1).containsKey(user2))){
+                graph.get(user1).put(user2, interaction);
+            }
+        }
+        else {
+            Hashtable<Integer, Interaction> user1Table = new Hashtable<>();
+            user1Table.put(user2,interaction);
+            graph.put(user1, user1Table);
+        }
     }
 
     /**
@@ -218,7 +222,7 @@ public class UDWInteractionGraph {
             report[1]=0;
         } else {
             report[0] = users.get(userID).getTotalInteractions();
-            report[1] = users.get(userID).getSetOfInteractedUsers().size();
+            report[1] = users.get(userID).getSetOfAdjacentUsers().size();
         }
         return report;
     }
@@ -228,8 +232,10 @@ public class UDWInteractionGraph {
      * @return the User ID for the Nth most active user
      */
     public int NthMostActiveUser(int N) {
-        // TODO: Implement this method
-        return -1;
+        if (N > NthMostActiveUser.size()){
+            return -1;
+        }
+        return NthMostActiveUser.get(N-1);
     }
 
     /* ------- Task 3 ------- */
@@ -239,8 +245,20 @@ public class UDWInteractionGraph {
      *    components in the UDWInteractionGraph object.
      */
     public int NumberOfComponents() {
-        // TODO: Implement this method
-        return 0;
+        if (users.isEmpty()){
+            return 0;
+        }
+        int numComponents = 0;
+        HashSet<Integer> seenUsers = new HashSet<>();
+        for (Integer userID : users.keySet()) {
+            if (!seenUsers.contains(userID)){
+                HashSet<Integer> nextComponent = SearchAlgorithms.
+                        findComponent(users.get(userID), new HashMap<>(users));
+                seenUsers.addAll(nextComponent);
+                numComponents++;
+            }
+        }
+        return numComponents;
     }
 
     /**
