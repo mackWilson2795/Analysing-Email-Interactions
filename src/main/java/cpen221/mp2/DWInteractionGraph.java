@@ -543,7 +543,6 @@ public class DWInteractionGraph {
                      userMap.get(userID2), new HashMap<>(userMap));
     }
 
-    /* ------- Task 4 ------- */
 
     /**
      * Read the MP README file carefully to understand
@@ -553,19 +552,16 @@ public class DWInteractionGraph {
      */
     public int MaxBreachedUserCount(int hours) {
         Set<Integer> senders = new HashSet<>(interactionGraph.keySet());
-        // TODO: make these static final variables (class level)
         int secondsPerMin = 60;
         int minPerHour = 60;
         int maxRange = hours*minPerHour*secondsPerMin;
         TreeSet<Integer> maxInfections = new TreeSet<>();
 
-        // TODO: Start here if implementing components
         for(Integer sender: senders){
             Set<Integer> receivers = new HashSet<>(interactionGraph.get(sender).keySet());
             Set<Integer> sendTimes = new HashSet<>();
             for(Integer receiver: receivers){
                 sendTimes.addAll(new HashSet<>(interactionGraph.get(sender).get(receiver).getTimes()));
-
             }
 
             for(Integer time: sendTimes){
@@ -598,20 +594,17 @@ public class DWInteractionGraph {
         List<Integer> startingNode = new ArrayList<>();
         startingNode.add(userID1);
         startingNode.add(startTime);
-
         nextPaths.add(startingNode);
 
         while(nextPaths.size() > 0){
             path.add(nextPaths.get(0));
             nextPaths.remove(0);
-
             lastUser = new ArrayList<Integer>(path.get(path.size()-1));
             visited.add(lastUser.get(0));
 
             if (lastUser.get(0) == userID2){
                 return visited.size();
             }
-
             if(interactionGraph.containsKey(lastUser.get(0))) {
                 adjacentUsers = interactionGraph.get(lastUser.get(0)).keySet();
             }
@@ -620,17 +613,14 @@ public class DWInteractionGraph {
             }
 
             List<List<Integer>> nextUsers = new ArrayList<>();
-
             List<Integer> pathElements = new ArrayList<>();
             List<Integer> nextPathElements = new ArrayList<>();
-
             for(List<Integer> element: path){
                 pathElements.add(element.get(0));
             }
             for(List<Integer> element: nextPaths){
                 nextPathElements.add(element.get(0));
             }
-
             for(Integer user : adjacentUsers) {
                 if ((!pathElements.contains(user) && !nextPathElements.contains(user))) {
                     int nextTime = interactionGraph.get(lastUser.get(0)).get(user).getNextTime(lastUser.get(1));
@@ -665,14 +655,10 @@ public class DWInteractionGraph {
                         nextPathElements.remove(index);
                     }
                 }
-                else{
-                    // TODO: empty else block can we remove?
-                }
+                else{  }
             }
             nextPaths.addAll(nextUsers);
         }
         return visited.size();
     }
-
-
 }
