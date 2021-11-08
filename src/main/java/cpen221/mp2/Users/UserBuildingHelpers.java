@@ -24,6 +24,24 @@ public class UserBuildingHelpers {
         }
         return userMap;
     }
+    public static HashMap<Integer, DirectedUser> createUserMapDW
+            (Hashtable<Integer, Hashtable<Integer, Interaction>> senderGraph) {
+        HashMap<Integer, DirectedUser> userMap = new HashMap<>();
+        for (Integer sender: senderGraph.keySet()) {
+            if(!(userMap.containsKey(sender))){
+                userMap.put(sender, new DirectedUser(sender));
+            }
+            for(Integer receiver : senderGraph.get(sender).keySet()){
+                int numEmails = senderGraph.get(sender).get(receiver).getInteractionCount();
+                userMap.get(sender).sendEmail(receiver, numEmails);
+                if(!(userMap.containsKey(receiver))){
+                    userMap.put(receiver, new DirectedUser(receiver));
+                }
+                userMap.get(receiver).receiveEmail(sender,numEmails);
+            }
+        }
+        return userMap;
+    }
 
     public static ArrayList<Integer> createUsersSortedByActivityUDW(HashMap<Integer, UndirectedUser> users) {
         List<User> userList = new ArrayList<>();

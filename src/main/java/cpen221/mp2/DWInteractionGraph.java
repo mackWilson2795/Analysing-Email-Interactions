@@ -4,6 +4,7 @@ import cpen221.mp2.InternalFrameworks.Email;
 import cpen221.mp2.InternalFrameworks.Interaction;
 import cpen221.mp2.InternalFrameworks.ReadingMethods;
 import cpen221.mp2.Users.DirectedUser;
+import cpen221.mp2.Users.UserBuildingHelpers;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -25,7 +26,6 @@ public class DWInteractionGraph {
     private ArrayList<Integer> NthMostActiveSender;
     private ArrayList<Integer> NthMostActiveReceiver;
 
-
     /**
      * Creates a new DWInteractionGraph using an email interaction file.
      * The email interaction file will be in the resources directory.
@@ -37,6 +37,7 @@ public class DWInteractionGraph {
         userIDs = new HashSet<>();
         interactionGraph = new Hashtable<>();
         interactionGraphReceiver = new Hashtable<>();
+        userMap = new HashMap<>();
 
         ArrayList<Email> emailDataRaw = ReadingMethods.readerFunction(fileName);
         for (Email emailData : emailDataRaw) {
@@ -44,6 +45,7 @@ public class DWInteractionGraph {
             storeEmailInteraction(emailData.getSender(), emailData.getReceiver(),
                 emailData.getTimeStamp());
         }
+        userMap = UserBuildingHelpers.createUserMapDW(interactionGraph);
     }
 
         /**
@@ -58,9 +60,10 @@ public class DWInteractionGraph {
          *                   t0 <= t <= t1 range.
          */
     public DWInteractionGraph(DWInteractionGraph inputDWIG, int[] timeFilter){
-
             Set<Integer> users = inputDWIG.getUserIDs();
             userIDs = inputDWIG.getUserIDs();
+            userMap = new HashMap<>();
+
 
             timeFilterGraph(inputDWIG, timeFilter, users);
 
@@ -77,6 +80,7 @@ public class DWInteractionGraph {
                 temporary.addAll(Temp);
             }
             userIDs.addAll(temporary);
+            userMap = UserBuildingHelpers.createUserMapDW(interactionGraph);
         }
 
         /**
@@ -94,22 +98,26 @@ public class DWInteractionGraph {
             Set<Integer> users = inputDWIG.getUserIDs();
             userIDs = inputDWIG.getUserIDs();
             Set<Integer> filterUsers = new HashSet<>(userFilter);
+            userMap = new HashMap<>();
 
             filterUserGraph(inputDWIG, users, userFilter);
             filterUserGraphReceiver(inputDWIG, filterUsers, users);
 
-        for (Integer sender : users) {
-            if (interactionGraph.get(sender) == null) {
-                userIDs.remove(sender);
+
+            for (Integer sender : users) {
+                if (interactionGraph.get(sender) == null) {
+                    userIDs.remove(sender);
+                }
             }
+
+            HashSet<Integer> temporary = new HashSet<>();
+            for (Integer sender : userIDs) {
+                Set<Integer> Temp = interactionGraph.get(sender).keySet();
+                temporary.addAll(Temp);
+            }
+            userIDs.addAll(temporary);
+            userMap = UserBuildingHelpers.createUserMapDW(interactionGraph);
         }
-        HashSet<Integer> temporary = new HashSet<>();
-        for (Integer sender : userIDs) {
-            Set<Integer> Temp = interactionGraph.get(sender).keySet();
-            temporary.addAll(Temp);
-        }
-        userIDs.addAll(temporary);
-    }
 
 
         public Interaction getUserInteraction ( int sender, int receiver){
