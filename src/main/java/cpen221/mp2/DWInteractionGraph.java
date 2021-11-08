@@ -356,8 +356,20 @@ public class DWInteractionGraph {
      * [NumberOfSenders, NumberOfReceivers, NumberOfEmailTransactions]
      */
     public int[] ReportActivityInTimeWindow(int[] timeWindow) {
-        // TODO: Implement this method
-        return null;
+        DWInteractionGraph timedSubGraph = new DWInteractionGraph(this, timeWindow);
+        int senders = 0;
+        int receivers = 0;
+        int numTransactions = 0;
+        for (Integer userID : userMap.keySet()){
+            if (userMap.get(userID).getSent() > 0){
+                senders++;
+            }
+            if (userMap.get(userID).getReceived() > 0){
+                receivers++;
+            }
+            numTransactions += userMap.get(userID).getTotalInteractions();
+        }
+        return new int[] {senders, receivers, numTransactions};
     }
 
     /**
@@ -422,16 +434,13 @@ public class DWInteractionGraph {
             if (lastUser == userID2){
                 return path;
             }
-
             if(interactionGraph.containsKey(lastUser)) {
                 adjacentUsers = interactionGraph.get(lastUser).keySet();
             }
             if(!interactionGraph.containsKey(lastUser)) {
                 adjacentUsers = new HashSet<>();
             }
-
             List<Integer> nextUsers = new ArrayList<>();
-
             for(Integer user : adjacentUsers){
                 if(!path.contains(user) && !nextPaths.contains(user)){
                     nextUsers.add(user);
@@ -440,7 +449,6 @@ public class DWInteractionGraph {
             Collections.sort(nextUsers);
             nextPaths.addAll(nextUsers);
         }
-
         return null;
     }
 
@@ -454,8 +462,8 @@ public class DWInteractionGraph {
      * if no path exists, should return null.
      */
     public List<Integer> DFS(int userID1, int userID2) {
-        // TODO: Implement this method
-        return null;
+        return SearchAlgorithms.directedDFS(userMap.get(userID1),
+                     userMap.get(userID2), new HashMap<>(userMap));
     }
 
     /* ------- Task 4 ------- */
@@ -469,17 +477,18 @@ public class DWInteractionGraph {
     public int MaxBreachedUserCount(int hours) {
 
         Set<Integer> senders = new HashSet<>(interactionGraph.keySet());
+        // TODO: make these static final variables (class level)
         int secondsPerMin = 60;
         int minPerHour = 60;
         int maxRange = hours*minPerHour*secondsPerMin;
-        TreeSet<Integer> maxInfections = new TreeSet<Integer>();
+        TreeSet<Integer> maxInfections = new TreeSet<>();
 
         // TODO: Start here if implementing components
         for(Integer sender: senders){
-            Set<Integer> receivers = new HashSet<Integer>(interactionGraph.get(sender).keySet());
-            Set<Integer> sendTimes = new HashSet<Integer>();
+            Set<Integer> receivers = new HashSet<>(interactionGraph.get(sender).keySet());
+            Set<Integer> sendTimes = new HashSet<>();
             for(Integer receiver: receivers){
-                sendTimes.addAll(new HashSet<Integer>(interactionGraph.get(sender).get(receiver).getTimes()));
+                sendTimes.addAll(new HashSet<>(interactionGraph.get(sender).get(receiver).getTimes()));
 
             }
 
