@@ -99,7 +99,9 @@ public class UDWInteractionGraph {
         HashSet<Integer> filterSet = new HashSet<>(userFilter);
         HashSet<Integer> usersInFinalMap = new HashSet<>();
         for (Integer userID: filterSet) {
-            usersInFinalMap.addAll(inputUDWIG.users.get(userID).getSetOfAdjacentUsers());
+            if(inputUDWIG.users.containsKey(userID)) {
+                usersInFinalMap.addAll(inputUDWIG.users.get(userID).getSetOfAdjacentUsers());
+            }
         }
         for (Integer user :inputUDWIG.graph.keySet()) {
              if(!(usersInFinalMap.contains(user))){
