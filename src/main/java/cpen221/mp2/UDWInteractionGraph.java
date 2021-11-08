@@ -34,8 +34,8 @@ public class UDWInteractionGraph {
      */
     //TODO: how do I put the reference for one object in both things
     public UDWInteractionGraph(String fileName) {
-        users = new HashMap<Integer, UndirectedUser>();
-        graph = new Hashtable<Integer, Hashtable<Integer, Interaction>>();
+        users = new HashMap<>();
+        graph = new Hashtable<>();
         ArrayList<Email> emailDataRaw = ReadingMethods.readerFunction(fileName);
         for (Email email:emailDataRaw) {
             addEmail(email);
@@ -174,7 +174,6 @@ public class UDWInteractionGraph {
      * @return the number of email interactions (send/receive) between user1 and user2
      */
     public int getEmailCount(int user1, int user2) {
-
         // TODO: Implement this getter method
         return 0;
     }

@@ -12,12 +12,16 @@ public class SearchAlgorithms {
     private static boolean found;
 
     /**
-     * Performs a depth first search on a Map of Integers to AbstractUsers
+     * Performs a depth first search on a Map of user ids -> users
+     * when a user has interacted with many other users, will search
+     * in the direction of the lowest user ID first
+     * // TODO: there is some technical information in this spec - is this ok?
      *
-     * @param startUser
-     * @param endUser
-     * @param mapOfAllUsers
-     * @return
+     * @param startUser the user to begin searching from
+     * @param endUser the user to search to
+     * @param mapOfAllUsers a Map of user ids -> users
+     * @return a list of integers which corresponds to the order
+     *         the users in the map were visited during the search
      */
     // todo: this could take in ints as well - decide what is easiest
     public static List<Integer> DFS(AbstractUser startUser, AbstractUser endUser, Map<Integer, AbstractUser> mapOfAllUsers){
@@ -34,8 +38,6 @@ public class SearchAlgorithms {
         recursiveDFSHelper(startUser, endUser);
 
         if (found) {
-            return searchOrder;
-        } else if (endUser.getUserID() == -1) {
             return searchOrder;
         } else {
             return null;

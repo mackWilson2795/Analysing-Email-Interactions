@@ -12,7 +12,7 @@ public class Email {
     private int receiver;
     private int timeStamp;
 
-    /*  Rep invariant
+    /*  Rep invariant:
             sender, receiver, and timeStamp should never be non-null.
      */
 
@@ -51,6 +51,7 @@ public class Email {
             receiver = emailNumbers[1];
             timeStamp = emailNumbers[2];
         } catch (NoSuchElementException e){
+            e.printStackTrace();
             throw new InvalidEmailException("Detected line with less than three entries" +
                     " ensure input data is formatted properly", e);
         }

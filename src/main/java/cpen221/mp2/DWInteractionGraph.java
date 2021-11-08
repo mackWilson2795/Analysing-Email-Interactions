@@ -9,14 +9,15 @@ import java.io.File;
 public class DWInteractionGraph {
 
 //Notes:
-    //1. added another hashtable,hashtable structure in the dwinteraction class but this time for receiver to sender
+    // TODO
+    //1. added another hashtable,hashtable structure in the DWInteraction class but this time for receiver to sender
 
     /* ------- Task 1 ------- */
     /* Building the Constructors */
     private Hashtable<Integer, Hashtable<Integer, Interaction>> interactionGraph;
     private Hashtable<Integer, Hashtable<Integer, Interaction>> interactionGraphReceiver;
     private Set<Integer> userIDs;
-    // TODO: set up these maps
+    // TODO: set up these objects
     private HashMap<Integer, DirectedUser> userMap;
     private ArrayList<Integer> NthMostActiveSender;
     private ArrayList<Integer> NthMostActiveReceiver;
@@ -173,47 +174,6 @@ public class DWInteractionGraph {
         userIDs.addAll(temporary);
     }
 
-
-
-    public Interaction getUserInteraction(int sender, int receiver){
-
-        int interactions = interactionGraph.get(sender).get(receiver).getInteractionCount();
-        ArrayList<Integer> copy = new ArrayList<>(interactionGraph.get(sender).get(receiver).getTimes());
-
-        return new Interaction(interactions,copy);
-    }
-
-    public Interaction getUserInteractionReceiver(int receiver, int sender){
-
-        int interactions = interactionGraphReceiver.get(receiver).get(sender).getInteractionCount();
-        ArrayList<Integer> copy = new ArrayList<>(interactionGraphReceiver.get(receiver)
-                                      .get(sender).getTimes());
-
-        return new Interaction(interactions,copy);
-    }
-
-    public Boolean isSender(int sender){
-        return interactionGraph.containsKey(sender);
-    }
-
-    public Boolean isInteractive(int sender, int receiver){
-        if(interactionGraph.containsKey(sender)){
-            return interactionGraph.get(sender).containsKey(receiver);
-        }
-        return false;
-    }
-
-    public Boolean isReceiver(int receiver){
-        return interactionGraphReceiver.containsKey(receiver);
-    }
-
-    public Boolean isInteractiveReceiver(int receiver, int sender){
-        if(interactionGraphReceiver.containsKey(receiver)){
-            return interactionGraphReceiver.get(receiver).containsKey(sender);
-        }
-        return false;
-    }
-
     /**
      * Creates a new DWInteractionGraph from a DWInteractionGraph object
      * and considering a list of User IDs.
@@ -267,7 +227,7 @@ public class DWInteractionGraph {
 
                             if (interactionGraphReceiver == null) {
                                 interactionGraphReceiver =
-                                    new Hashtable<>();
+                                        new Hashtable<>();
                             }
                             interactionGraphReceiver.put(receive1, new Hashtable<>());
                             interactionGraphReceiver.get(receive1).put(send1, placeHolder);
@@ -290,6 +250,71 @@ public class DWInteractionGraph {
         }
 
         userIDs.addAll(temporary);
+    }
+
+    public Interaction getUserInteraction(int sender, int receiver){
+        int interactions = interactionGraph.get(sender).get(receiver).getInteractionCount();
+        ArrayList<Integer> copy = new ArrayList<>(interactionGraph.get(sender).get(receiver).getTimes());
+        return new Interaction(interactions,copy);
+    }
+
+    public Interaction getUserInteractionReceiver(int receiver, int sender){
+        int interactions = interactionGraphReceiver.get(receiver).get(sender).getInteractionCount();
+        ArrayList<Integer> copy = new ArrayList<>(interactionGraphReceiver.get(receiver)
+                                      .get(sender).getTimes());
+        return new Interaction(interactions,copy);
+    }
+
+    /**
+     * Determines if the user has sent an email
+     *
+     * @param sender the user
+     * @return true if the user has sent an email
+     *         false otherwise
+     */
+    public Boolean isSender(int sender){
+        return interactionGraph.containsKey(sender);
+    }
+
+    /**
+     * Determines if the sender has emailed the receiver
+     *
+     * @param sender the sender of the email
+     * @param receiver the receiver of the email
+     * @return true if an email has been sent from sender to receiver
+     *         false otherwise
+     */
+    public Boolean isInteractive(int sender, int receiver){
+        if(interactionGraph.containsKey(sender)){
+            return interactionGraph.get(sender).containsKey(receiver);
+        }
+        return false;
+    }
+
+    /**
+     * Determines if a user has received an email
+     *
+     * @param receiver the user
+     * @return true if the user has received an email
+     *         false otherwise
+     */
+    public Boolean isReceiver(int receiver){
+        return interactionGraphReceiver.containsKey(receiver);
+    }
+
+    /**
+     * Determines if a user has received an email from a specific user
+     *
+     * @param receiver the receiver of the email
+     * @param sender the sender of the email
+     * @return true if the sender has emailed the receiver
+     *         false otherwise
+     */
+    public Boolean isInteractiveReceiver(int receiver, int sender){
+        if(interactionGraphReceiver.containsKey(receiver)){
+            return interactionGraphReceiver.get(receiver).containsKey(sender);
+        }
+        return false;
     }
 
     /**
@@ -344,8 +369,8 @@ public class DWInteractionGraph {
      * returns [0, 0, 0].
      */
     public int[] ReportOnUser(int userID) {
-        // TODO: Implement this method
-        return null;
+        DirectedUser user = userMap.get(userID);
+        return new int[] {user.getSent(), user.getReceived(), user.getSetOfInteractedUsers().size()};
     }
 
     /**
@@ -357,8 +382,11 @@ public class DWInteractionGraph {
      * tie, secondarily sorts the tied User IDs in ascending order.
      */
     public int NthMostActiveUser(int N, SendOrReceive interactionType) {
-        // TODO: Implement this method
-        return -1;
+        if (interactionType == SendOrReceive.SEND){
+            return NthMostActiveSender.get(N + 1);
+        } else {
+            return NthMostActiveReceiver.get(N + 1);
+        }
     }
 
     /* ------- Task 3 ------- */
@@ -402,7 +430,7 @@ public class DWInteractionGraph {
 
             List<Integer> nextUsers = new ArrayList<>();
 
-            for(Integer user:adjacentUsers){
+            for(Integer user : adjacentUsers){
                 if(!path.contains(user) && !nextPaths.contains(user)){
                     nextUsers.add(user);
                 }
@@ -413,6 +441,7 @@ public class DWInteractionGraph {
 
         return null;
     }
+
     /**
      * performs depth first search on the DWInteractionGraph object
      * to check path between user with userID1 and user with userID2.
