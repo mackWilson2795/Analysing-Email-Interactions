@@ -43,8 +43,6 @@ public class DWInteractionGraph {
 
             storeEmailInteraction(emailData.getSender(), emailData.getReceiver(),
                 emailData.getTimeStamp());
-
-
         }
     }
 
