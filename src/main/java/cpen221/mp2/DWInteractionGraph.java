@@ -393,7 +393,10 @@ public class DWInteractionGraph {
      */
     public int[] ReportOnUser(int userID) {
         DirectedUser user = userMap.get(userID);
-        return new int[] {user.getSent(), user.getReceived(), user.getSetOfAdjacentUsers().size()};
+        Set<Integer> uniqueUserIDs = new HashSet<>();
+        uniqueUserIDs.addAll(user.getUniqueUsersSentTo());
+        uniqueUserIDs.addAll(user.getUniqueUsersReceivedFrom());
+        return new int[] {user.getSent(), user.getReceived(), uniqueUserIDs.size()};
     }
 
     /**
@@ -485,7 +488,6 @@ public class DWInteractionGraph {
      * @return the maximum number of users that can be polluted in N hours
      */
     public int MaxBreachedUserCount(int hours) {
-
         Set<Integer> senders = new HashSet<>(interactionGraph.keySet());
         // TODO: make these static final variables (class level)
         int secondsPerMin = 60;

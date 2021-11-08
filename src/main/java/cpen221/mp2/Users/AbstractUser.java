@@ -8,6 +8,17 @@ public abstract class AbstractUser implements User {
     protected int userID;
 
     // TODO: rep invars or abs functs?
+    /* Abstraction Function:
+        setOfAdjacentUsers = the set of all users which this user has
+                             interacted with.
+        userID = the unique identifier associated with the user
+     */
+
+    /* Rep invariant:
+         hashCode() == userID
+         equals() must compare user IDs, if two users have the same
+                  id they must be considered the same user.
+     */
 
     /**
      * Default constructor for a user
@@ -38,8 +49,9 @@ public abstract class AbstractUser implements User {
         return new HashSet<>(setOfAdjacentUsers);
     }
 
-    //TODO: do i write specs for these two??
-
+    /**
+     * Indicates whether two user objects represent the same user.
+     */
     @Override
     public boolean equals(Object that){
          if (that instanceof AbstractUser){
@@ -48,6 +60,10 @@ public abstract class AbstractUser implements User {
          return false;
     }
 
+    /**
+     * Creates a hash code value for this user.
+     * @return a hash code value for this user.
+     */
     @Override
     public int hashCode() {
          return getUserID();

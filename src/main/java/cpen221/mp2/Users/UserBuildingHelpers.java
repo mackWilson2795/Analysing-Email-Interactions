@@ -60,8 +60,9 @@ public class UserBuildingHelpers {
         }
         return userIDsSortedByActivity;
     }
-    public static ArrayList<Integer> createUsersSortedByActivityDW(HashMap<Integer, DirectedUser> users, SendOrReceive
-                                                                   interactionType) {
+
+    public static ArrayList<Integer> createUsersSortedByActivityDW(HashMap<Integer, DirectedUser> users,
+                                                                   SendOrReceive interactionType) {
         List<DirectedUser> userList = new ArrayList<>();
         for (Integer user : users.keySet()) {
             userList.add(users.get(user));

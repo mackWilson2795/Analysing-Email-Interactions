@@ -8,9 +8,25 @@ public class DirectedUser extends AbstractUser implements User {
     private HashSet<Integer> uniqueUsersSentTo;
     private HashSet<Integer> uniqueUsersReceivedFrom;
 
-    /* Rep invariant:
-         uniqueUsersInteractedWith == union of uniqueUsersSentTo and uniqueUsersReceivedFrom
+    /* Abstraction Function:
+        sent = number of emails sent by the user
+        received = number of emails received by the user
+        uniqueUsersSentTo = list of all users this user has emailed
+        uniqueUsersReceivedFrom = list of all users that have emailed
+                                  this user
      */
+
+    /* Rep invariant:
+         sent >= uniqueUsersSentTo.size()
+         received >= uniqueUsersReceivedFrom.size()
+     */
+    public boolean checkRep(){
+        boolean rep = true;
+        if (sent <= uniqueUsersSentTo.size() || received <= uniqueUsersReceivedFrom.size()){
+            rep = false;
+        }
+        return rep;
+    }
 
     /**
      * Constructs a new directed user given an identifier

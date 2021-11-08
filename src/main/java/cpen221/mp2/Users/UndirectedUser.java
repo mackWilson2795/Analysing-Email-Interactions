@@ -5,6 +5,21 @@ import java.util.HashSet;
 public class UndirectedUser extends AbstractUser implements User {
     private int totalInteractions = 0;
 
+    /* Abstraction Function:
+        totalInteractions = the number of emails this user has sent and received
+     */
+
+    /* Rep invariant:
+         totalInteractions >= super.setOfAdjacentUsers.size();
+     */
+    public boolean checkRep(){
+        boolean rep = true;
+        if (totalInteractions <= setOfAdjacentUsers.size()){
+            rep = false;
+        }
+        return rep;
+    }
+
     /**
      * Constructs a new undirected user given an identifier
      *

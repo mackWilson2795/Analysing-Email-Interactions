@@ -26,10 +26,16 @@ public interface User {
      */
     HashSet<Integer> getSetOfAdjacentUsers();
 
-    // TODO: specs for these
+    /**
+     * Indicates whether two user objects represent the same user.
+     */
     @Override
     boolean equals(Object that);
 
+    /**
+     * Creates a hash code value for this user.
+     * @return a hash code value for this user.
+     */
     @Override
     int hashCode();
 }
