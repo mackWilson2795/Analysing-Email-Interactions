@@ -27,16 +27,13 @@ public class EdgeCaseTests {
 
     @Test
     public void exceptionTests() {
-        System.out.println("\nThe following exceptions are intended for our testing:\n");
-        try {
+        System.out.println("\n****The following exceptions are intended for our testing:****\n");
+
             ReadingMethods.readerFunction("resources/brokenFormatting.txt");
-        } catch (NoSuchElementException e){
-        }
-        try {
+
             ReadingMethods.readerFunction("resources/brokenFormatting1.txt");
-        } catch (NoSuchElementException e){
-        }
-        System.out.println("\nEnd of intended exceptions\n");
+
+        System.out.println("\n****End of intended exceptions****\n");
 
     }
 }
