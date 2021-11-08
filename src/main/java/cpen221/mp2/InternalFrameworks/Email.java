@@ -8,13 +8,9 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Email {
-    private int sender;
-    private int receiver;
-    private int timeStamp;
-
-    /*  Rep invariant:
-            sender, receiver, and timeStamp should never be non-null.
-     */
+    private Integer sender;
+    private Integer receiver;
+    private Integer timeStamp;
 
     /*
         Abstraction function:
@@ -23,6 +19,24 @@ public class Email {
         timeStamp = the time, in seconds, of the email
      */
 
+    /*  Rep invariant:
+            sender, receiver, and timeStamp should never be non-null.
+     */
+    public boolean checkRep(){
+        boolean rep = true;
+        if (sender == null || receiver == null || timeStamp == null){
+            rep = false;
+        }
+        return rep;
+    }
+
+    /**
+     * Creates an email from three integers:
+     *
+     * @param sender id of the sender
+     * @param receiver id of the receiver
+     * @param timeStamp timeStamp of the email
+     */
     public Email (int sender, int receiver, int timeStamp){
         this.sender = sender;
         this.receiver = receiver;
@@ -53,7 +67,10 @@ public class Email {
         } catch (NoSuchElementException e){
             e.printStackTrace();
             throw new InvalidEmailException("Detected line with less than three entries" +
-                    " ensure input data is formatted properly", e);
+                    " ensure input data is formatted properly");
+        }
+        if (!checkRep()){
+            throw new InvalidEmailException("Null email detected");
         }
     }
 

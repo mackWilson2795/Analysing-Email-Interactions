@@ -28,7 +28,6 @@ public class UDWInteractionGraph {
                    // TODO: involve user map in rep invar
                    // TODO: user1, user2 is the same as user2, user1
      */
-
     public boolean checkRep(){
         HashSet<Integer> userIDs = new HashSet<>(users.keySet());
         return (userIDs.equals(graph.keySet()));
@@ -129,7 +128,11 @@ public class UDWInteractionGraph {
         // TODO: Implement this constructor
     }
 
-
+    /**
+     * Given an email, adds an interaction to the graph.
+     *
+     * @param email an Email object
+     */
     private void addEmail(Email email){
         int user1 = email.getSender();
         int user2 = email.getReceiver();
@@ -140,6 +143,14 @@ public class UDWInteractionGraph {
         }
     }
 
+    /**
+     * Adds a single interaction between user1 and user2 at
+     * a given time.
+     *
+     * @param user1 the userID of the first user
+     * @param user2 the userID of the second user
+     * @param time the time of the interaction
+     */
     private void addInteractionTime(int user1, int user2, int time){
         if (graph.containsKey(user1)){
             Hashtable<Integer, Interaction> user1Table = graph.get(user1);
@@ -157,6 +168,14 @@ public class UDWInteractionGraph {
         }
     }
 
+    /**
+     * Adds an interaction object between user1 and user2
+     * to the graph.
+     *
+     * @param user1 the userID of the first user
+     * @param user2 the userID of the second user
+     * @param interaction the interaction object to add
+     */
     private void addInteraction(Integer user1, Integer user2, Interaction interaction){
         if(graph.containsKey(user1)){
             if(!(graph.get(user1).containsKey(user2))){

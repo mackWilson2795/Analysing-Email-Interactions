@@ -50,24 +50,24 @@ public class DWInteractionGraph {
         NthMostActiveReceiver = UserBuildingHelpers.createUsersSortedByActivityDW(userMap,SendOrReceive.RECEIVE);
     }
 
-        /**
-         * Creates a new DWInteractionGraph from a DWInteractionGraph object
-         * and considering a time window filter.
-         *
-         * @param inputDWIG  a DWInteractionGraph object
-         * @param timeFilter an integer array of length 2: [t0, t1]
-         *                   where t0 <= t1. The created DWInteractionGraph
-         *                   should only include those emails in the input
-         *                   DWInteractionGraph with send time t in the
-         *                   t0 <= t <= t1 range.
-         */
+    /**
+     * Creates a new DWInteractionGraph from a DWInteractionGraph object
+     * and considering a time window filter.
+     *
+     * @param inputDWIG  a DWInteractionGraph object
+     * @param timeFilter an integer array of length 2: [t0, t1]
+     *                   where t0 <= t1. The created DWInteractionGraph
+     *                   should only include those emails in the input
+     *                   DWInteractionGraph with send time t in the
+     *                   t0 <= t <= t1 range.
+     */
     public DWInteractionGraph(DWInteractionGraph inputDWIG, int[] timeFilter){
             Set<Integer> users = inputDWIG.getUserIDs();
             userIDs = inputDWIG.getUserIDs();
             userMap = new HashMap<>();
             NthMostActiveReceiver = new ArrayList<>();
             NthMostActiveSender= new ArrayList<>();
-            timeFilterGraph(inputDWIG, timeFilter, users);
+            timeFilterSenderGraph(inputDWIG, timeFilter, users);
 
             timeFilterReceiverGraph(inputDWIG, timeFilter, users);
 
@@ -98,7 +98,6 @@ public class DWInteractionGraph {
          *                   nor the receiver exist in userFilter.
          */
     public DWInteractionGraph(DWInteractionGraph inputDWIG, List < Integer > userFilter) {
-
             Set<Integer> users = inputDWIG.getUserIDs();
             userIDs = inputDWIG.getUserIDs();
             Set<Integer> filterUsers = new HashSet<>(userFilter);
@@ -109,13 +108,11 @@ public class DWInteractionGraph {
             filterUserGraph(inputDWIG, users, userFilter);
             filterUserGraphReceiver(inputDWIG, filterUsers, users);
 
-
             for (Integer sender : users) {
                 if (interactionGraph.get(sender) == null) {
                     userIDs.remove(sender);
                 }
             }
-
             HashSet<Integer> temporary = new HashSet<>();
             for (Integer sender : userIDs) {
                 Set<Integer> Temp = interactionGraph.get(sender).keySet();
@@ -127,8 +124,15 @@ public class DWInteractionGraph {
             NthMostActiveReceiver = UserBuildingHelpers.createUsersSortedByActivityDW(userMap,SendOrReceive.RECEIVE);
     }
 
-
-    public Interaction getUserInteraction ( int sender, int receiver){
+    /**
+     * Obtain a copy of the Interaction object between two users
+     *
+     * @param sender the sender in the interaction
+     * @param receiver the receiver in the interaction
+     * @return an interaction object which contains the directed
+     *         interaction from the sender to the receiver
+     */
+    public Interaction getUserInteraction (int sender, int receiver){
         int interactions = interactionGraph.get(sender).get(receiver).getInteractionCount();
         ArrayList<Integer> copy =
             new ArrayList<>(interactionGraph.get(sender).get(receiver).getTimes());
@@ -203,8 +207,15 @@ public class DWInteractionGraph {
         return new HashSet<>(userIDs);
     }
 
+    /**
+     * Adds an interaction to the graph from sender to receiver at a
+     * given time.
+     *
+     * @param sender the sender of the email
+     * @param receiver the receiver of the email
+     * @param time the time of the email
+     */
     private void storeEmailInteraction(int sender, int receiver, int time){
-
         userIDs.add(sender);
         userIDs.add(receiver);
 
@@ -226,8 +237,17 @@ public class DWInteractionGraph {
         }
     }
 
-    private void timeFilterGraph(DWInteractionGraph inputDWIG, int[] timeFilter,
-                                 Set<Integer> users) {
+    /**
+     * Applies a time filter to the sender graph, creating a subgraph where
+     * all interactions occur between t0 <= t <= t1 where timeFilter is [t0, t1]
+     *
+     * @param inputDWIG the DWInteractionGraph to create a subgraph from
+     * @param timeFilter the time window to create the subgraph in, of
+     *                   the form [t0, t1]
+     * @param users a set of all userIDs in the graph
+     */
+    private void timeFilterSenderGraph(DWInteractionGraph inputDWIG, int[] timeFilter,
+                                       Set<Integer> users) {
         for (Integer sender : users) {
             for (Integer receiver : users) {
                 if (inputDWIG.isSender(sender)) {
@@ -256,6 +276,15 @@ public class DWInteractionGraph {
         }
     }
 
+    /**
+     * Applies a time filter to the receiver graph, creating a subgraph where
+     * all interactions occur between t0 <= t <= t1 where timeFilter is [t0, t1]
+     *
+     * @param inputDWIG the DWInteractionGraph to create a subgraph from
+     * @param timeFilter the time window to create the subgraph in, of
+     *                   the form [t0, t1]
+     * @param users a set of all userIDs in the graph
+     */
     private void timeFilterReceiverGraph(DWInteractionGraph inputDWIG, int[] timeFilter, Set<Integer> users) {
         for (Integer receive1 : users) {
             for (Integer send1 : users) {
@@ -286,7 +315,14 @@ public class DWInteractionGraph {
         }
     }
 
-
+    /**
+     * Apply a user filter to the senders of a graph, where the resulting graph will only include users
+     * those users have sent emails to
+     *
+     * @param inputDWIG the DWInteractionGraph to create a subgraph from
+     * @param users the set of all users in the initial graph
+     * @param filterUsers the list of users to filter the subgraph from
+     */
     private void filterUserGraph(DWInteractionGraph inputDWIG, Set<Integer> users, List<Integer> filterUsers) {
         for (Integer sender : users) {
             for (Integer receiver : users) {
@@ -309,6 +345,14 @@ public class DWInteractionGraph {
         }
     }
 
+    /**
+     * Apply a user filter to the receivers of a graph, where the resulting graph will only include users
+     * those users have sent emails to
+     *
+     * @param inputDWIG the DWInteractionGraph to create a subgraph from
+     * @param userFilter the list of users to filter the subgraph from
+     * @param users the set of all users in the initial graph
+     */
     private void filterUserGraphReceiver(DWInteractionGraph inputDWIG, Set<Integer> userFilter, Set<Integer> users) {
         for (Integer receive1 : users) {
             for (Integer send1 : users) {
@@ -511,6 +555,18 @@ public class DWInteractionGraph {
         return maxInfections.last();
     }
 
+    /**
+     * Perform a breadth first search between two users in the graph, where the search
+     * at a specific time, and will find the longest path between users where all emails
+     * happen before a final time
+     *
+     * @param userID1 the user to begin searching from
+     * @param userID2 the user to search towards
+     * @param maxSeconds the maximum time, in seconds, that any interactions can occur
+     *                   within
+     * @param startTime the time the search begins at
+     * @return the length of the longest search.
+     */
     private int TimeBFS(int userID1, int userID2, int maxSeconds, int startTime) {
         List<List<Integer>> path = new ArrayList<>();
         List<List<Integer>> nextPaths = new ArrayList<>();
