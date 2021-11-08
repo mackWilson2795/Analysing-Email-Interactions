@@ -47,7 +47,7 @@ public class Task1DWTests {
 
     @Test
     public void test1GetEmailCountGraph1() {
-        Assertions.assertEquals(1, dwig1.getEmailCount(1, 0));
+        Assertions.assertEquals(0, dwig1.getEmailCount(2, 3));
         Assertions.assertEquals(1, dwig1.getEmailCount(8, 0));
 
     }

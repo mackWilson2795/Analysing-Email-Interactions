@@ -247,8 +247,13 @@ public class DWInteractionGraph {
                             interactionGraph = new Hashtable<>();
                         }
                         if (count > 0) {
-                            interactionGraph.put(sender, new Hashtable<>());
-                            interactionGraph.get(sender).put(receiver, nextInteraction);
+                            if (interactionGraph.containsKey(sender)) {
+                                interactionGraph.get(sender).put(receiver, nextInteraction);
+                            }
+                            else {
+                                interactionGraph.put(sender, new Hashtable<>());
+                                interactionGraph.get(sender).put(receiver, nextInteraction);
+                            }
                         }
                     }
                 }
@@ -277,8 +282,13 @@ public class DWInteractionGraph {
                             interactionGraphReceiver = new Hashtable<>();
                         }
                         if (count > 0) {
-                            interactionGraphReceiver.put(receive1, new Hashtable<>());
-                            interactionGraphReceiver.get(receive1).put(send1, placeHolder);
+                            if (interactionGraphReceiver.containsKey(receive1)) {
+                                interactionGraphReceiver.get(receive1).put(send1, placeHolder);
+                            }
+                            else {
+                                interactionGraphReceiver.put(receive1, new Hashtable<>());
+                                interactionGraphReceiver.get(receive1).put(send1, placeHolder);
+                            }
                         }
                     }
                 }
@@ -301,8 +311,13 @@ public class DWInteractionGraph {
                         if (interactionGraph == null) {
                             interactionGraph = new Hashtable<>();
                         }
-                        interactionGraph.put(sender, new Hashtable<>());
-                        interactionGraph.get(sender).put(receiver, placeHolder);
+                        if (interactionGraph.containsKey(sender)) {
+                            interactionGraph.get(sender).put(receiver, placeHolder);
+                        }
+                        else {
+                            interactionGraph.put(sender, new Hashtable<>());
+                            interactionGraph.get(sender).put(receiver, placeHolder);
+                        }
                     }
                 }
             }
@@ -328,8 +343,13 @@ public class DWInteractionGraph {
                                 interactionGraphReceiver =
                                     new Hashtable<>();
                             }
-                            interactionGraphReceiver.put(receive1, new Hashtable<>());
-                            interactionGraphReceiver.get(receive1).put(send1, placeHolder);
+                            if (interactionGraphReceiver.containsKey(receive1)) {
+                                interactionGraphReceiver.get(receive1).put(send1, placeHolder);
+                            }
+                            else {
+                                interactionGraphReceiver.put(receive1, new Hashtable<>());
+                                interactionGraphReceiver.get(receive1).put(send1, placeHolder);
+                            }
                         }
                     }
                 }
