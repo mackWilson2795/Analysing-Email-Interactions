@@ -36,6 +36,8 @@ public class DWInteractionGraph {
         interactionGraph = new Hashtable<>();
         interactionGraphReceiver = new Hashtable<>();
         userMap = new HashMap<>();
+        NthMostActiveReceiver = new ArrayList<>();
+        NthMostActiveSender = new ArrayList<>();
 
         ArrayList<Email> emailDataRaw = ReadingMethods.readerFunction(fileName);
         for (Email emailData : emailDataRaw) {
@@ -44,6 +46,8 @@ public class DWInteractionGraph {
                 emailData.getTimeStamp());
         }
         userMap = UserBuildingHelpers.createUserMapDW(interactionGraph);
+        NthMostActiveSender = UserBuildingHelpers.createUsersSortedByActivityDW(userMap,SendOrReceive.SEND);
+        NthMostActiveReceiver = UserBuildingHelpers.createUsersSortedByActivityDW(userMap,SendOrReceive.RECEIVE);
     }
 
         /**
@@ -61,8 +65,8 @@ public class DWInteractionGraph {
             Set<Integer> users = inputDWIG.getUserIDs();
             userIDs = inputDWIG.getUserIDs();
             userMap = new HashMap<>();
-
-
+            NthMostActiveReceiver = new ArrayList<>();
+            NthMostActiveSender= new ArrayList<>();
             timeFilterGraph(inputDWIG, timeFilter, users);
 
             timeFilterReceiverGraph(inputDWIG, timeFilter, users);
@@ -79,6 +83,8 @@ public class DWInteractionGraph {
             }
             userIDs.addAll(temporary);
             userMap = UserBuildingHelpers.createUserMapDW(interactionGraph);
+            NthMostActiveSender = UserBuildingHelpers.createUsersSortedByActivityDW(userMap,SendOrReceive.SEND);
+            NthMostActiveReceiver = UserBuildingHelpers.createUsersSortedByActivityDW(userMap,SendOrReceive.RECEIVE);
         }
 
         /**
@@ -97,6 +103,8 @@ public class DWInteractionGraph {
             userIDs = inputDWIG.getUserIDs();
             Set<Integer> filterUsers = new HashSet<>(userFilter);
             userMap = new HashMap<>();
+            NthMostActiveReceiver = new ArrayList<>();
+            NthMostActiveSender = new ArrayList<>();
 
             filterUserGraph(inputDWIG, users, userFilter);
             filterUserGraphReceiver(inputDWIG, filterUsers, users);
@@ -115,6 +123,8 @@ public class DWInteractionGraph {
             }
             userIDs.addAll(temporary);
             userMap = UserBuildingHelpers.createUserMapDW(interactionGraph);
+            NthMostActiveSender = UserBuildingHelpers.createUsersSortedByActivityDW(userMap,SendOrReceive.SEND);
+            NthMostActiveReceiver = UserBuildingHelpers.createUsersSortedByActivityDW(userMap,SendOrReceive.RECEIVE);
         }
 
 
