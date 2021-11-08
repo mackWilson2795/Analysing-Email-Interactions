@@ -25,7 +25,7 @@ public class TEMP_UserBuildingHelpers {
         return  userMap;
     }
 
-    public static void createUsersSortedByActivity(HashMap) {
+    public static void createUsersSortedByActivity() {
         // TODO: double check logic here - im tired
         List<User> userList = new ArrayList<>();
         for (Integer user : users.keySet()) {
