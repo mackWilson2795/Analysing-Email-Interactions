@@ -1,11 +1,10 @@
-package cpen221.mp2;
+package cpen221.mp2.InternalFrameworks;
 
 import cpen221.mp2.Exceptions.InvalidEmailException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 

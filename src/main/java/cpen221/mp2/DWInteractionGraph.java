@@ -1,5 +1,8 @@
 package cpen221.mp2;
 
+import cpen221.mp2.InternalFrameworks.Email;
+import cpen221.mp2.InternalFrameworks.Interaction;
+import cpen221.mp2.InternalFrameworks.ReadingMethods;
 import cpen221.mp2.Users.DirectedUser;
 
 import java.io.FileNotFoundException;
@@ -35,6 +38,12 @@ public class DWInteractionGraph {
         userIDs = new HashSet<>();
         interactionGraph = new Hashtable<>();
         interactionGraphReceiver = new Hashtable<>();
+
+
+        ArrayList<Email> emailDataRaw = ReadingMethods.readerFunction(fileName);
+        for (Email each : emailDataRaw){
+            // TODO:start here
+        }
 
         try {
             File file = new File(fileName);
@@ -72,7 +81,6 @@ public class DWInteractionGraph {
                     else {
                         interactionGraph.get(sender).get(receiver).addInteraction(number);
                     }
-
                     if (interactionGraphReceiver.get(receiver) == null) {
                         interactionGraphReceiver.get(receiver).put(sender, new Interaction(number));
                     }
@@ -185,7 +193,6 @@ public class DWInteractionGraph {
      *                   nor the receiver exist in userFilter.
      */
     public DWInteractionGraph(DWInteractionGraph inputDWIG, List<Integer> userFilter) {
-
         Set<Integer> users = inputDWIG.getUserIDs();
         userIDs = inputDWIG.getUserIDs();
         Set<Integer> filterUsers = new HashSet<>(userFilter);
@@ -285,8 +292,24 @@ public class DWInteractionGraph {
      *         false otherwise
      */
     public Boolean isInteractive(int sender, int receiver){
-        if(interactionGraph.containsKey(sender)){
+        if (interactionGraph.containsKey(sender)){
             return interactionGraph.get(sender).containsKey(receiver);
+        }
+        return false;
+    }
+
+
+    /**
+     * Determines if a user has received an email from a specific user
+     *
+     * @param receiver the receiver of the email
+     * @param sender the sender of the email
+     * @return true if the sender has emailed the receiver
+     *         false otherwise
+     */
+    public Boolean isInteractiveReceiver(int receiver, int sender){
+        if (interactionGraphReceiver.containsKey(receiver)){
+            return interactionGraphReceiver.get(receiver).containsKey(sender);
         }
         return false;
     }
@@ -303,28 +326,11 @@ public class DWInteractionGraph {
     }
 
     /**
-     * Determines if a user has received an email from a specific user
-     *
-     * @param receiver the receiver of the email
-     * @param sender the sender of the email
-     * @return true if the sender has emailed the receiver
-     *         false otherwise
-     */
-    public Boolean isInteractiveReceiver(int receiver, int sender){
-        if(interactionGraphReceiver.containsKey(receiver)){
-            return interactionGraphReceiver.get(receiver).containsKey(sender);
-        }
-        return false;
-    }
-
-    /**
      * @return a Set of Integers, where every element in the set is a User ID
      * in this DWInteractionGraph.
      */
     public Set<Integer> getUserIDs() {
-        Set<Integer> copy = new HashSet<>();
-        copy.addAll(userIDs);
-        return copy;
+        return new HashSet<>(userIDs);
     }
 
     /**
@@ -370,7 +376,7 @@ public class DWInteractionGraph {
      */
     public int[] ReportOnUser(int userID) {
         DirectedUser user = userMap.get(userID);
-        return new int[] {user.getSent(), user.getReceived(), user.getSetOfInteractedUsers().size()};
+        return new int[] {user.getSent(), user.getReceived(), user.getSetOfAdjacentUsers().size()};
     }
 
     /**
@@ -388,8 +394,6 @@ public class DWInteractionGraph {
             return NthMostActiveReceiver.get(N + 1);
         }
     }
-
-    /* ------- Task 3 ------- */
 
     /**
      * performs breadth first search on the DWInteractionGraph object

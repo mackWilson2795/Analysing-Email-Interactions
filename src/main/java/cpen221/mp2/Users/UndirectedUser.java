@@ -2,7 +2,7 @@ package cpen221.mp2.Users;
 
 import java.util.HashSet;
 
-public class UndirectedUser extends AbstractUser {
+public class UndirectedUser extends AbstractUser implements User {
     private int totalInteractions = 0;
 
     /**
@@ -22,7 +22,7 @@ public class UndirectedUser extends AbstractUser {
     public UndirectedUser(UndirectedUser user){
         super(user.userID);
         totalInteractions = user.totalInteractions;
-        uniqueUsersInteractedWith = new HashSet<>(user.uniqueUsersInteractedWith);
+        setOfAdjacentUsers = new HashSet<>(user.setOfAdjacentUsers);
     }
 
     /**
@@ -33,7 +33,7 @@ public class UndirectedUser extends AbstractUser {
     public UndirectedUser(DirectedUser user) {
         super(user.userID);
         totalInteractions = user.getTotalInteractions();
-        uniqueUsersInteractedWith = new HashSet<>(user.uniqueUsersInteractedWith);
+        setOfAdjacentUsers = new HashSet<>(user.setOfAdjacentUsers);
     }
 
     /**
@@ -46,13 +46,12 @@ public class UndirectedUser extends AbstractUser {
      *                  requires: numEmails is non-negative // TODO: might be able to remove this requires statement?
      */
     public void interactWithUser(int id, int numEmails) {
-        super.uniqueUsersInteractedWith.add(id);
-
+        super.setOfAdjacentUsers.add(id);
         totalInteractions += numEmails;
     }
 
     /**
-     * Obtain the total number of inteactions this user has
+     * Obtain the total number of interactions this user has
      * been involved in.
      *
      * @return the number of interactions
