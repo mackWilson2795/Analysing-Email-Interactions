@@ -45,18 +45,24 @@ public class Interaction {
         emailCount = 0;
         allTimes = new ArrayList<Integer>();
     }
+    public Interaction(int interactions, ArrayList<Integer> times){
+        this();
+        for(Integer time: times) {
+            this.addInteraction(time);
+        }
+    }
+
 
     public Interaction(int time){
-        timeOrdered = new TreeSet<TimeNode>();
-        frequencyCount = new HashMap<Integer, Integer>();
+        this();
         frequencyCount.put(time, 1);
         timeOrdered.add(new TimeNode(time, 1));
         emailCount = 1;
-        allTimes = new ArrayList<Integer>();
         allTimes.add(time);
     }
 
     public Interaction(Interaction interaction, int lowerBound, int upperBound){
+        this();
         if (lowerBound < interaction.getMinTime()){
             lowerBound = interaction.getMinTime();
         }
@@ -64,8 +70,6 @@ public class Interaction {
             upperBound = interaction.getMaxTime();
         }
         emailCount = interaction.timeRangeInteractions(lowerBound, upperBound);
-        allTimes = new ArrayList<>();
-        frequencyCount = new HashMap<Integer, Integer>();
         timeOrdered = (TreeSet<TimeNode>) interaction.timeOrdered.subSet(new TimeNode(lowerBound),
                         true, new TimeNode(upperBound), true);// does creating these nodes add anything to the nodes at this existing time
         //eg. another email count or something? test case to look at
@@ -79,15 +83,20 @@ public class Interaction {
 
     public void addInteraction(int time){
         if(frequencyCount.containsKey(time)) {
-            TimeNode node = new TimeNode(time, frequencyCount.get(time));
+            int count = frequencyCount.get(time);
+            TimeNode node = new TimeNode(time, count);
             timeOrdered.remove(node);
             node.add();
             timeOrdered.add(node);
+            count++;
+            frequencyCount.put(time, count);
         }
         else {
             frequencyCount.put(time,1);
             timeOrdered.add(new TimeNode(time, 1));
         }
+        emailCount++;
+        allTimes.add(time);
     }
 
     public int timeRangeInteractions (int lowerBound, int upperBound){
